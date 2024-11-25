@@ -29,7 +29,7 @@ const addPostIt = () => {
 </script>
 
 <template>
-  <draggable v-model="postItRef" item-key="id">
+  <draggable v-model="postItRef" item-key="id" group="postItList">
     <template #item="{element}">
       <PostIt :model="element"></PostIt>
     </template>
