@@ -2,7 +2,7 @@
 
 import {ProjectModel} from "./models/ProjectModel.ts";
 import {PostItModel} from "./models/PostItModel.ts";
-import CardList from "./components/PostItList.vue";
+import Project from "./components/Project.vue";
 
 const project : ProjectModel = {
   title: "Project Title",
@@ -30,12 +30,7 @@ const project : ProjectModel = {
 </script>
 
 <template>
-  <div class="project">
-    <h1>{{ project.title }}</h1>
-    <div class="columns">
-      <CardList v-for="column in project.postItList" :model="column"></CardList>
-    </div>
-  </div>
+  <Project :model="project"></Project>
 </template>
 
 <style scoped>
