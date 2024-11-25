@@ -1,30 +1,41 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+
+import {ProjectModel} from "./models/ProjectModel.ts";
+import {PostItModel} from "./models/PostItModel.ts";
+import CardList from "./components/PostItList.vue";
+
+const project : ProjectModel = {
+  title: "Project Title",
+  postItList: [
+    {
+      title: "Column 1",
+      order: 1,
+      postIts: [
+          new PostItModel("Card 1", 1,"Description 1", "red", new Date(), ["Alice", "Bob"], ["tag1", "tag2"]),
+          new PostItModel("Card 2", 2,"Description 2", "blue", new Date(), ["Alice", "Charlie"], ["tag2", "tag3"]),
+      ]
+    },
+    {
+      title: "Column 2",
+      order: 2,
+      postIts: [
+          new PostItModel("Card 3", 1,"Description 3", "green", new Date(), ["Bob", "Charlie"], ["tag1", "tag3"]),
+          new PostItModel("Card 4", 2,"Description 4", "yellow", new Date(), ["Alice", "Charlie"], ["tag1", "tag2"]),
+      ]
+    }
+  ]
+}
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="project">
+    <h1>{{ project.title }}</h1>
+    <div class="columns">
+      <CardList v-for="column in project.postItList" :model="column"></CardList>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
