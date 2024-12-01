@@ -1,4 +1,4 @@
-import {PostItListModel} from "./PostItListModel.ts";
+import {PostItListModel} from "./PostItListModel";
 
 export class ProjectModel {
     public title: string;

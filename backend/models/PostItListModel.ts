@@ -1,4 +1,4 @@
-import {PostItModel} from "./PostItModel.ts";
+import {PostItModel} from "./PostItModel";
 
 export class PostItListModel {
     public id: number;
