@@ -4,11 +4,16 @@ import { ref, watch } from "vue";
 import PostIt from "./PostIt.vue";
 import Draggable from "vuedraggable";
 import EditableInput from "./EditableInput.vue";
+import {PostItModel} from "../models/PostItModel.ts";
 
-const { model } = defineProps<{ model: PostItListModel }>();
+const { model } = defineProps<{
+  model: PostItListModel,
+  projectId : number
+}>();
+
 const emit = defineEmits<{
   (e: "removeColumn", columnId: number): void;
-  (e: "cardClick", card: any): void;
+  (e: "cardClick", card: PostItModel, projectId: number, columnId: number): void;
 }>();
 
 const postItRef = ref(model.postIts);
@@ -47,7 +52,7 @@ const handleTitleEditFinished = () => {
     <!-- Draggable post-it container -->
     <draggable v-model="postItRef" item-key="id" group="postItList">
       <template #item="{ element }">
-        <PostIt :model="element" @cardClick="$emit('cardClick', element)" />
+        <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
       </template>
       <template #footer>
         <button @click="addPostIt">Add</button>

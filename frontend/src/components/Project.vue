@@ -9,7 +9,7 @@ import { PostItModel } from "../models/PostItModel.ts"; // Import the PostItMode
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
 
-const selectedCard = ref<PostItModel | null>(null);
+const selectedCard = ref<{ card: PostItModel, projectId: number, columnId: number } | null>(null);
 
 const addColumn = () => {
   postItListRef.value.push({
@@ -23,12 +23,22 @@ const removeColumn = (columnId: number) => {
   postItListRef.value = postItListRef.value.filter((column) => column.id !== columnId);
 };
 
-const handleCardClick = (card: PostItModel) => {
-  selectedCard.value = card; // Store the clicked card's PostItModel
+const handleCardClick = (card: PostItModel, projectId: number, columnId: number) => {
+  selectedCard.value = { card, projectId, columnId };
 };
 
 const closeModal = () => {
   selectedCard.value = null; // Reset the selected card
+};
+
+// Handle removing a card
+const removeCard = (id: number) => {
+  if (selectedCard.value) {
+    model.postItList = model.postItList.filter((column) =>
+        column.postIts.every(postIt => postIt.id !== id) // Remove the card with matching id
+    );
+    selectedCard.value = null; // Reset the selected card
+  }
 };
 </script>
 
@@ -38,7 +48,7 @@ const closeModal = () => {
 
     <draggable v-model="postItListRef" item-key="id" group="project" class="columns">
       <template #item="{ element }">
-        <CardList :model="element" @removeColumn="removeColumn" @cardClick="handleCardClick" />
+        <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" />
       </template>
       <template #footer>
         <button @click="addColumn">Add Column</button>
@@ -48,8 +58,9 @@ const closeModal = () => {
     <!-- Modal Component -->
     <Modal
         v-if="selectedCard"
-        :postIt="selectedCard"
+        :selectedCard="selectedCard"
         @close="closeModal"
+        @removeCard="removeCard"
     />
   </div>
 </template>

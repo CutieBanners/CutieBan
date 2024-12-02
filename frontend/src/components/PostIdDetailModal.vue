@@ -1,27 +1,34 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
+import {defineProps, defineEmits, inject} from "vue";
 import { PostItModel } from "../models/PostItModel";
-import EditableInput from "./EditableInput.vue"; // Import the EditableInput component
+import EditableInput from "./EditableInput.vue";
+import {CrudService} from "../services/CrudService.ts"; // Import the EditableInput component
 
 // Props to accept a PostItModel instance
-const { postIt } = defineProps<{ postIt: PostItModel }>();
+const { selectedCard } = defineProps<{ selectedCard: { card: PostItModel, projectId: number, columnId: number } }>();
+const crudService : CrudService = inject('crudService')!;
+const postIt = selectedCard.card;
 
-// Emit event to close the modal
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
 // Update the PostItModel's title and description
 const updateTitle = (newTitle: string) => {
-  postIt.title = newTitle;
+  selectedCard.card.title = newTitle;
 };
 
 const updateDescription = (newDescription: string) => {
-  postIt.description = newDescription;
+  selectedCard.card.description = newDescription;
 };
 
 const closeModal = () => {
   emit("close");
+}
+
+const removeCard = () => {
+  crudService.deletePostItFromColumn(selectedCard.projectId, selectedCard.columnId, selectedCard.card);
+  closeModal();
 }
 </script>
 
@@ -49,7 +56,11 @@ const closeModal = () => {
         <li><strong>Tags:</strong> {{ postIt.tags.join(', ') }}</li>
         <li><strong>Due Date:</strong> {{ postIt.endDate.toLocaleDateString() }}</li>
       </ul>
-      <button @click="closeModal">Close</button>
+
+      <div class="modal-buttons">
+        <button @click="closeModal">Close</button>
+        <button @click="removeCard">Remove Card</button> <!-- Remove Card Button -->
+      </div>
     </div>
   </div>
 </template>
@@ -74,8 +85,13 @@ const closeModal = () => {
   text-align: center;
 }
 
-button {
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
   margin-top: 10px;
+}
+
+button {
   padding: 10px 20px;
   background-color: #007bff;
   color: white;
