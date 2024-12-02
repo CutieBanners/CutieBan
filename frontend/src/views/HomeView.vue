@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
+import ProjectCreation from "@/components/ProjectCreation.vue";
 </script>
 
 <template>
-  Home
+  <ProjectCreation></ProjectCreation>
 </template>
 
 <style scoped>
