@@ -2,9 +2,13 @@
 import Project from "@/components/Project.vue";
 import {inject} from "vue";
 import {CrudService} from "@/services/CrudService.ts";
+import {useRoute} from "vue-router";
 
 const crudService : CrudService = inject('crudService')!;
-const project = crudService.getProject(0)!;
+const route = useRoute();
+const projectId : number = Number(route.params.id);
+const project = crudService.getProject(projectId);
+console.log(project);
 </script>
 
 <template>

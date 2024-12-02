@@ -34,7 +34,14 @@ export class CrudService {
 
     // Get a specific project by ID
     getProject(id: number) {
-        return this.projects.find(project => project.id === id);
+        console.log(this.projects);
+        return this.projects.find((project) => {
+            console.log(typeof project.id);
+            console.log(typeof id);
+            console.log(project.id);
+            console.log(id);
+            return project.id === id;
+        });
     }
 
     // Add a new project
