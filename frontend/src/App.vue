@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
 
+import SideNav from "@/components/SideNav.vue";
 </script>
 
 <template>
-<router-view></router-view>
+  <SideNav></SideNav>
+  <router-view></router-view>
 </template>
 
 <style scoped>
