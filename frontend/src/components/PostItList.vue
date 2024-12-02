@@ -29,15 +29,30 @@ const addPostIt = () => {
 </script>
 
 <template>
-  <draggable v-model="postItRef" item-key="id" group="postItList">
-    <template #item="{element}">
-      <PostIt :model="element"></PostIt>
-    </template>
-    <template #footer>
-      <button @click="addPostIt">Add</button>
-    </template>
-  </draggable>
+  <div class="column">
+    <h2>{{ model.title }}</h2>
+    <draggable v-model="postItRef" item-key="id" group="postItList">
+      <template #item="{element}">
+        <PostIt :model="element"></PostIt>
+      </template>
+      <template #footer>
+        <button @click="addPostIt">Add</button>
+      </template>
+    </draggable>
+  </div>
 </template>
 
 <style scoped>
+.column {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 10px;
+  width: 250px;
+  border-radius: 5px;
+}
+
+.column h2 {
+  text-align: center;
+}
+
 </style>

@@ -27,10 +27,7 @@ const addColumn = () => {
 
       <!-- Draggable item template for each column -->
       <template #item="{ element }">
-        <div class="column">
-          <h2>{{ element.title }}</h2>
           <CardList :model="element" />
-        </div>
       </template>
 
       <!-- Footer to add new columns -->
@@ -54,18 +51,6 @@ const addColumn = () => {
   margin-top: 20px;
   padding: 10px;
   overflow-x: auto;
-}
-
-.column {
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 10px;
-  width: 250px;
-  border-radius: 5px;
-}
-
-.column h2 {
-  text-align: center;
 }
 
 button {
