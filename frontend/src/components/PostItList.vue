@@ -6,17 +6,20 @@ import Draggable from "vuedraggable";
 import EditableInput from "./EditableInput.vue";
 
 const { model } = defineProps<{ model: PostItListModel }>();
+const emit = defineEmits<{
+  (e: "removeColumn", columnId: number): void;
+}>();
+
 const postItRef = ref(model.postIts);
 
 // Watch for changes to `postItRef` and sync them back to `model.postIts`
 watch(postItRef, (newItems) => {
   model.postIts = [...newItems];
-  console.log("model.postIts", model.postIts);
 }, { deep: true });
 
 const addPostIt = () => {
   postItRef.value.push({
-    id: postItRef.value.length,
+    id: Date.now(), // Unique ID
     title: "New Post-It",
     order: postItRef.value.length + 1,
     description: "Description",
@@ -29,18 +32,21 @@ const addPostIt = () => {
 
 const handleTitleEditFinished = () => {
   console.log("Title editing finished. New title:", model.title);
-  // Add logic to send the updated title to the backend if needed
 };
 </script>
 
 <template>
   <div class="column">
-    <!-- Use EditableInput and listen for finishEditing -->
+    <!-- Editable title -->
     <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
 
+    <!-- Button to remove the column -->
+    <button @click="$emit('removeColumn', model.id)" class="remove-button">Remove Column</button>
+
+    <!-- Draggable post-it container -->
     <draggable v-model="postItRef" item-key="id" group="postItList">
       <template #item="{ element }">
-        <PostIt :model="element"></PostIt>
+        <PostIt :model="element" />
       </template>
       <template #footer>
         <button @click="addPostIt">Add</button>
@@ -56,5 +62,14 @@ const handleTitleEditFinished = () => {
   padding: 10px;
   width: 250px;
   border-radius: 5px;
+}
+
+.remove-button {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.remove-button:hover {
+  background-color: #d9363e;
 }
 </style>

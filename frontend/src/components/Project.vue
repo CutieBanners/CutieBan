@@ -4,17 +4,21 @@ import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import { ref } from "vue";
 
-// Define props and reactive reference to postItList
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
 
-// Method to add a new column (you can modify this as per your requirement)
+// Method to add a new column
 const addColumn = () => {
   postItListRef.value.push({
-    id: postItListRef.value.length + 1, // Ensure unique column ID
+    id: Date.now(), // Use a timestamp to ensure unique column ID
     title: "New Column",
-    postIts: [] // Empty list of post-its for the new column
+    postIts: [], // Empty list of post-its for the new column
   });
+};
+
+// Method to remove a column by its ID
+const removeColumn = (columnId: number) => {
+  postItListRef.value = postItListRef.value.filter((column) => column.id !== columnId);
 };
 </script>
 
@@ -24,10 +28,9 @@ const addColumn = () => {
 
     <!-- Draggable columns container -->
     <draggable v-model="postItListRef" item-key="id" group="project" class="columns">
-
       <!-- Draggable item template for each column -->
       <template #item="{ element }">
-          <CardList :model="element" />
+        <CardList :model="element" @removeColumn="removeColumn" />
       </template>
 
       <!-- Footer to add new columns -->
