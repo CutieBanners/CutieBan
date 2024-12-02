@@ -7,18 +7,29 @@ import { ref } from "vue";
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
 
-// Method to add a new column
+const showModal = ref(false);
+const selectedCard = ref(null);
+
 const addColumn = () => {
   postItListRef.value.push({
-    id: Date.now(), // Use a timestamp to ensure unique column ID
+    id: Date.now(),
     title: "New Column",
-    postIts: [], // Empty list of post-its for the new column
+    postIts: [],
   });
 };
 
 // Method to remove a column by its ID
 const removeColumn = (columnId: number) => {
   postItListRef.value = postItListRef.value.filter((column) => column.id !== columnId);
+};
+
+const handleCardClick = (card: any) => {
+  selectedCard.value = card;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
 };
 </script>
 
@@ -30,7 +41,7 @@ const removeColumn = (columnId: number) => {
     <draggable v-model="postItListRef" item-key="id" group="project" class="columns">
       <!-- Draggable item template for each column -->
       <template #item="{ element }">
-        <CardList :model="element" @removeColumn="removeColumn" />
+        <CardList :model="element" @removeColumn="removeColumn" @cardClick="handleCardClick" />
       </template>
 
       <!-- Footer to add new columns -->
@@ -38,6 +49,15 @@ const removeColumn = (columnId: number) => {
         <button @click="addColumn">Add Column</button>
       </template>
     </draggable>
+
+    <!-- Popup Modal -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal">
+        <h2>{{ selectedCard?.title }}</h2>
+        <p>{{ selectedCard?.description }}</p>
+        <button @click="closeModal">Close</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -54,6 +74,25 @@ const removeColumn = (columnId: number) => {
   margin-top: 20px;
   padding: 10px;
   overflow-x: auto;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
 }
 
 button {

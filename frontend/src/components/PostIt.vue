@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import { PostItModel } from '../models/PostItModel.ts'
-defineProps<{ model: PostItModel }>()
+import { defineProps, defineEmits } from "vue";
+import { PostItModel } from "../models/PostItModel.ts";
+
+const { model } = defineProps<{ model: PostItModel }>();
+const emit = defineEmits<{
+  (e: "cardClick", card: PostItModel): void;
+}>();
+
+const handleClick = () => {
+  emit("cardClick", model);
+};
 </script>
 
 <template>
-  <div class="post-it">
+  <div class="post-it" @click="handleClick">
     <h2>{{ model.title }}</h2>
     <p>{{ model.description }}</p>
   </div>
@@ -17,6 +25,6 @@ defineProps<{ model: PostItModel }>()
   border: 1px solid #ccc;
   margin-bottom: 5px;
   background-color: #f9f9f9;
-  cursor: grab;
+  cursor: pointer;
 }
 </style>

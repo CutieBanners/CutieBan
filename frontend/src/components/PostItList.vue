@@ -8,6 +8,7 @@ import EditableInput from "./EditableInput.vue";
 const { model } = defineProps<{ model: PostItListModel }>();
 const emit = defineEmits<{
   (e: "removeColumn", columnId: number): void;
+  (e: "cardClick", card: any): void;
 }>();
 
 const postItRef = ref(model.postIts);
@@ -46,7 +47,7 @@ const handleTitleEditFinished = () => {
     <!-- Draggable post-it container -->
     <draggable v-model="postItRef" item-key="id" group="postItList">
       <template #item="{ element }">
-        <PostIt :model="element" />
+        <PostIt :model="element" @cardClick="$emit('cardClick', element)" />
       </template>
       <template #footer>
         <button @click="addPostIt">Add</button>
