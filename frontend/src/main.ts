@@ -4,15 +4,7 @@ import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
-import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/Home.vue';
-
-const router = createRouter({
-    history: createWebHistory(),
-    routes:[
-        {path: '/', name: "Home", component: Home}
-    ]
-})
+import router from '@/router'
 
 const app = createApp(App);
 app.use(PrimeVue, {
