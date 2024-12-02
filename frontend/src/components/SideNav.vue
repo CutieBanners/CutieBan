@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import {Button, Drawer, Avatar} from "primevue";
-
-
+import {Button, Drawer, Menu} from "primevue";
 import {ref} from "vue";
-const visible = ref(false)
+import {ProjectLinkModel} from "@/models/ProjectLinkModel";
+const visible : boolean = ref(false)
 
-const saved = ["Saved 1", "Saved 2"]
+const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new ProjectLinkModel("2", "project2")]
 
 </script>
 
@@ -13,12 +12,36 @@ const saved = ["Saved 1", "Saved 2"]
   <div class="card flex justify-center">
     <Drawer v-model:visible="visible" header="CutieBan">
       <h3><i class="pi pi-bookmark-fill"></i> Saved</h3>
-      <div></div>
+      <ul>
+        <div v-for="project in projects">
+          <RouterLink
+              v-if="project.id"
+              :to="{ name: 'project', params: { id: project.id } }"
+          >
+            <li>
+              <i class="pi pi-angle-right"></i>
+              <span>{{project.title}}</span>
+            </li>
+          </RouterLink>
+        </div>
+      </ul>
     </Drawer>
-    <Button icon="pi pi-arrow-right" @click="visible = true" />
+    <Button icon="pi pi-bars" @click="visible = true" severity="secondary"/>
   </div>
 </template>
 
 <style scoped>
+ul {
+  padding-left: 1rem;
+}
 
+li {
+  padding: 0.5rem 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
 </style>
