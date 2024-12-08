@@ -3,11 +3,13 @@ import { MongoClient, Db, Collection } from 'mongodb';
 export class DatabaseService {
     private client: MongoClient;
     private db: Db;
+    private collection: Collection;
 
-    constructor(private uri: string, private dbName: string) {
+    constructor(private uri: string, private dbName: string, private collectionName: string) {
         this.client = new MongoClient(this.uri);
+        this.db = this.client.db(this.dbName);
+        this.collection = this.db.collection(collectionName);
     }
-
     /**
      * Connects to the database.
      */
@@ -36,85 +38,75 @@ export class DatabaseService {
     }
 
     /**
-     * Inserts a document into a collection and returns its ID.
-     * @param collectionName - The name of the collection.
+     * Inserts a document into the collection and returns its ID.
      * @param document - The document to insert.
      * @returns The inserted document ID.
      */
-    public async insertOne<T>(collectionName: string, document: T): Promise<string> {
+    public async insertOne<T>(document: T): Promise<string> {
         try {
-            const collection: Collection = this.db.collection(collectionName);
-            const result = await collection.insertOne(document);
+            const result = await this.collection.insertOne(document);
             return result.insertedId.toString();
         } catch (error) {
-            console.error(`Failed to insert document into ${collectionName}:`, error);
+            console.error(`Failed to insert document:`, error);
             throw error;
         }
     }
 
     /**
-     * Finds a single document in a collection.
-     * @param collectionName - The name of the collection.
+     * Finds a single document in the collection.
      * @param query - The query object.
      * @returns The found document or null if not found.
      */
-    public async findOne<T>(collectionName: string, query: object): Promise<T | null> {
+    public async findOne<T>(query: object): Promise<T | null> {
         try {
-            const collection: Collection = this.db.collection(collectionName);
-            return await collection.findOne<T>(query);
+            return await this.collection.findOne<T>(query);
         } catch (error) {
-            console.error(`Failed to find document in ${collectionName}:`, error);
+            console.error(`Failed to find document:`, error);
             throw error;
         }
     }
 
     /**
-     * Finds multiple documents in a collection.
-     * @param collectionName - The name of the collection.
+     * Finds multiple documents in the collection.
      * @param query - The query object.
      * @returns An array of found documents.
      */
-    public async findMany<T>(collectionName: string, query: object): Promise<T[]> {
+    public async findMany<T>(query: object): Promise<T[]> {
         try {
-            const collection: Collection = this.db.collection(collectionName);
-            return await collection.find<T>(query).toArray();
+            return await this.collection.find<T>(query).toArray();
         } catch (error) {
-            console.error(`Failed to find documents in ${collectionName}:`, error);
+            console.error(`Failed to find documents:`, error);
             throw error;
         }
     }
 
     /**
-     * Updates a document in a collection.
-     * @param collectionName - The name of the collection.
+     * Updates a document in the collection.
      * @param query - The query to identify the document.
      * @param update - The update object.
      * @returns The number of documents updated.
      */
-    public async updateOne(collectionName: string, query: object, update: object): Promise<number> {
+    public async updateOne(query: object, update: object): Promise<number> {
         try {
-            const collection: Collection = this.db.collection(collectionName);
-            const result = await collection.updateOne(query, { $set: update });
+            const result = await this.collection.updateOne(query, { $set: update });
             return result.modifiedCount;
         } catch (error) {
-            console.error(`Failed to update document in ${collectionName}:`, error);
+            console.error(`Failed to update document:`, error);
             throw error;
         }
     }
 
     /**
-     * Deletes a document from a collection.
-     * @param collectionName - The name of the collection.
+     * Deletes a document from the collection.
      * @param query - The query to identify the document.
      * @returns The number of documents deleted.
      */
-    public async deleteOne(collectionName: string, query: object): Promise<number> {
+    public async deleteOne(query: object): Promise<number> {
         try {
-            const collection: Collection = this.db.collection(collectionName);
-            const result = await collection.deleteOne(query);
+            const result = await this.collection.deleteOne(query);
             return result.deletedCount || 0;
         } catch (error) {
-            console.error(`Failed to delete document from ${collectionName}:`, error);
+            console.error(`Failed to delete document:`, error);
             throw error;
         }
     }
