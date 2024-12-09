@@ -8,7 +8,7 @@ const project = crudService.getProject(0)!;
 </script>
 
 <template>
-  <Project :model="project" class=""></Project>
+  <Project :model="project"></Project>
 </template>
 
 <style scoped>

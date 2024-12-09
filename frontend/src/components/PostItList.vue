@@ -42,7 +42,7 @@ const handleTitleEditFinished = () => {
 </script>
 
 <template>
-  <div class="column w-3 h-fit p-2 bg-auto border-round-sm border-2 surface-border border-primary bg-white">
+  <div class="">
     <!-- Editable title -->
     <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
 

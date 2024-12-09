@@ -44,19 +44,24 @@ const removeCard = (id: number) => {
 </script>
 
 <template>
-  <div class="project">
-    <h1 class="chewy-regular text-6xl m-0">{{ model.title }}
-    <Horizontal_rule></Horizontal_rule>
-    </h1>
+  <div class="">
+    <div class="flex justify-content-center">
+      <h1 class="chewy-regular text-6xl m-0">{{ model.title }}
+        <Horizontal_rule></Horizontal_rule>
+      </h1>
+    </div>
 
-    <draggable v-model="postItListRef" item-key="id" group="project" class="columns w-full">
-      <template #item="{ element }">
-        <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" />
-      </template>
-      <template #footer>
-        <button @click="addColumn" class="w-3 h-fit p-2 border-round-sm">Add Column</button>
-      </template>
-    </draggable>
+    <div class="">
+      <draggable v-model="postItListRef" item-key="id" group="project" class="project h-85">
+        <template #item="{ element }">
+          <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="w-250px vl"/>
+        </template>
+        <template #footer>
+          <button @click="addColumn" class="h-fit p-2 border-round-sm">Add Column</button>
+        </template>
+      </draggable>
+    </div>
+
 
     <!-- Modal Component -->
     <Modal
@@ -71,15 +76,25 @@ const removeCard = (id: number) => {
 <style scoped>
 .project {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
+
 }
 
-.columns {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  padding: 10px;
-  overflow-x: auto;
+.w-250px {
+  flex: 0 0 250px;
 }
+
+.h-85 {
+  height: 85vh;
+}
+
+.vl {
+  border-right: 2px dashed;
+  height: 90vh;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
 </style>
