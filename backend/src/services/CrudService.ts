@@ -8,7 +8,7 @@ export class CRUDService {
     constructor(private dbService: DatabaseService) {}
 
     async createPostIt(projectId: string, postItListId: number): Promise<string> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -34,13 +34,13 @@ export class CRUDService {
 
         postItList.postIts.push(postIt);
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
 
         return postIt.id.toString();
     }
 
     async getPostIt(projectId: string, postItId: number): Promise<PostItModel> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -54,7 +54,7 @@ export class CRUDService {
     }
 
     async updatePostIt(projectId: string, postItListId: number, postItId: number, postIt: PostItModel): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -71,11 +71,11 @@ export class CRUDService {
 
         Object.assign(existingPostIt, postIt);
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
     async deletePostIt(projectId: string, postItId: number): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -87,11 +87,11 @@ export class CRUDService {
 
         postItList.postIts = postItList.postIts.filter(p => p.id !== postItId);
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
     async movePostIt(projectId: string, postItId: number, newOrder: number): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -115,11 +115,11 @@ export class CRUDService {
             postItList.postIts.filter(p => p.order < oldOrder && p.order >= newOrder).forEach(p => p.order++);
         }
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
     async createPostItList(projectId: string): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -135,11 +135,11 @@ export class CRUDService {
 
         project.postItList.push(postItList);
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
     async getPostItList(projectId: string, postItListId: number): Promise<PostItListModel> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -153,7 +153,7 @@ export class CRUDService {
     }
 
     async updatePostItList(projectId: string, postItListId: number, postItList: PostItListModel): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -165,22 +165,22 @@ export class CRUDService {
 
         Object.assign(existingPostItList, postItList);
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
     async deletePostItList(projectId: string, postItListId: number): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
 
         project.postItList = project.postItList.filter(list => list.id !== postItListId);
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
     async movePostItList(projectId: string, postItListId: number, newOrder: number): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
@@ -199,46 +199,46 @@ export class CRUDService {
             project.postItList.filter(list => list.order < oldOrder && list.order >= newOrder).forEach(list => list.order++);
         }
 
-        await this.dbService.updateOne({ _id: projectId }, { postItList: project.postItList });
+        await this.dbService.updateOne(projectId, { postItList: project.postItList });
     }
 
-    async createProject(title: string): Promise<string> {
+    async createProject(title: string): Promise<ProjectModel> {
         const project = {
-            id: "1",
             title: title,
             postItList: [],
         } as ProjectModel;
         project.id = await this.dbService.insertOne(project);
         this.updateProject(project.id, project);
-        return project.id;
-    }
-
-    async getProject(projectId: string): Promise<ProjectModel> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
-        if (!project) {
-            throw new Error(`Project with id ${projectId} not found`);
-        }
-
         return project;
     }
 
-    async updateProject(projectId: string, project: ProjectModel): Promise<void> {
-        const existingProject = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+    async getProject(projectId: string): Promise<ProjectModel> {
+        let project = await this.dbService.findOne<ProjectModel>(projectId);
+        if (!project) {
+            throw new Error(`Project with id ${projectId} not found`);
+        }
+        
+        project.id = projectId;
+        return project;
+    }
+
+    async updateProject(projectId: string, project: ProjectModel): Promise<number> {
+        const existingProject = await this.dbService.findOne<ProjectModel>(projectId);
         if (!existingProject) {
             throw new Error(`Project with id ${projectId} not found`);
         }
 
         Object.assign(existingProject, project);
 
-        await this.dbService.updateOne({ _id: projectId }, project);
+        return await this.dbService.updateOne(projectId, project);
     }
 
     async deleteProject(projectId: string): Promise<void> {
-        const project = await this.dbService.findOne<ProjectModel>({ _id: projectId });
+        const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
 
-        await this.dbService.deleteOne({ _id: projectId });
+        await this.dbService.deleteOne(projectId);
     }
 }
