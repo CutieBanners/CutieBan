@@ -1,4 +1,4 @@
-import { MongoClient, Db, Collection } from 'mongodb';
+import { MongoClient, Db, Collection, ObjectId } from 'mongodb';
 
 export class DatabaseService {
     private client: MongoClient;
@@ -45,21 +45,26 @@ export class DatabaseService {
     public async insertOne<T>(document: T): Promise<string> {
         try {
             const result = await this.collection.insertOne(document);
-            return result.insertedId.toString();
+            if (result.acknowledged) {
+                return result.insertedId.toString(); // Return MongoDB-generated ID
+            } else {
+                throw new Error("Insert operation was not acknowledged.");
+            }
         } catch (error) {
             console.error(`Failed to insert document:`, error);
             throw error;
         }
     }
+    
 
     /**
      * Finds a single document in the collection.
-     * @param query - The query object.
+     * @param _id - The id to identify the document with ObjectId.
      * @returns The found document or null if not found.
      */
-    public async findOne<T>(query: object): Promise<T | null> {
+    public async findOne<T>(_id: string): Promise<T | null> {
         try {
-            return await this.collection.findOne<T>(query);
+            return await this.collection.findOne<T>({ _id: new ObjectId(_id) });
         } catch (error) {
             console.error(`Failed to find document:`, error);
             throw error;
@@ -68,12 +73,12 @@ export class DatabaseService {
 
     /**
      * Finds multiple documents in the collection.
-     * @param query - The query object.
+     * @param _id - The id to identify the document with ObjectId.
      * @returns An array of found documents.
      */
-    public async findMany<T>(query: object): Promise<T[]> {
+    public async findMany<T>(_id: string): Promise<T[]> {
         try {
-            return await this.collection.find<T>(query).toArray();
+            return await this.collection.find<T>({ _id: new ObjectId(_id) }).toArray();
         } catch (error) {
             console.error(`Failed to find documents:`, error);
             throw error;
@@ -82,14 +87,14 @@ export class DatabaseService {
 
     /**
      * Updates a document in the collection.
-     * @param query - The query to identify the document.
+     * @param _id - The id to identify the document with ObjectId.
      * @param update - The update object.
      * @returns The number of documents updated.
      */
-    public async updateOne(query: object, update: object): Promise<number> {
+    public async updateOne(_id: string, update: object): Promise<number> {
         try {
-            const result = await this.collection.updateOne(query, { $set: update });
-            return result.modifiedCount;
+            const result = await this.collection.updateOne({ _id: new ObjectId(_id) }, { $set: update });
+            return result.modifiedCount || 0;
         } catch (error) {
             console.error(`Failed to update document:`, error);
             throw error;
@@ -101,9 +106,9 @@ export class DatabaseService {
      * @param query - The query to identify the document.
      * @returns The number of documents deleted.
      */
-    public async deleteOne(query: object): Promise<number> {
+    public async deleteOne(_id: string): Promise<number> {
         try {
-            const result = await this.collection.deleteOne(query);
+            const result = await this.collection.deleteOne({ _id: new ObjectId(_id) });
             return result.deletedCount || 0;
         } catch (error) {
             console.error(`Failed to delete document:`, error);
