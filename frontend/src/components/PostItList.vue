@@ -43,11 +43,13 @@ const handleTitleEditFinished = () => {
 
 <template>
   <div class="">
-    <!-- Editable title -->
-    <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
-
-    <!-- Button to remove the column -->
-    <button @click="$emit('removeColumn', model.id)" class="remove-button">Remove Column</button>
+    <div class="flex align-items-center justify-content-between cursor-pointer">
+      <i class="pi pi-arrows-h"></i>
+      <!-- Editable title -->
+      <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
+      <!-- Button to remove the column -->
+      <i class="pi pi-trash remove-button" @click="$emit('removeColumn', model.id)"></i>
+    </div>
 
     <!-- Draggable post-it container -->
     <draggable v-model="postItRef" item-key="id" group="postItList">
@@ -64,11 +66,10 @@ const handleTitleEditFinished = () => {
 <style scoped>
 
 .remove-button {
-  background-color: #ff4d4f;
-  color: white;
+  color: #ff4d4f;
 }
 
 .remove-button:hover {
-  background-color: #d9363e;
+  color: #d9363e;
 }
 </style>
