@@ -54,7 +54,7 @@ const removeCard = (id: number) => {
         <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" />
       </template>
       <template #footer>
-        <button @click="addColumn">Add Column</button>
+        <button @click="addColumn" class="w-3 h-fit p-2 border-round-sm">Add Column</button>
       </template>
     </draggable>
 

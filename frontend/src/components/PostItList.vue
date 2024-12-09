@@ -42,7 +42,7 @@ const handleTitleEditFinished = () => {
 </script>
 
 <template>
-  <div class="column">
+  <div class="column w-3 h-fit p-2 bg-auto border-round-sm border-2 surface-border border-primary bg-white">
     <!-- Editable title -->
     <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
 
@@ -62,13 +62,6 @@ const handleTitleEditFinished = () => {
 </template>
 
 <style scoped>
-.column {
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  padding: 10px;
-  width: 250px;
-  border-radius: 5px;
-}
 
 .remove-button {
   background-color: #ff4d4f;
