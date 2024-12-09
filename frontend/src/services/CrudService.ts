@@ -1,12 +1,13 @@
 import { ProjectModel } from "../models/ProjectModel";
 import { PostItModel } from "../models/PostItModel";
-import {CookieService} from "@/services/CookieService";
-import {ProjectLinkModel} from "@/models/ProjectLinkModel";
+import { CookieService } from "@/services/CookieService";
+import { ProjectLinkModel } from "@/models/ProjectLinkModel";
+import { reactive } from "vue";
 
 export class CrudService {
     private cookieService: CookieService = new CookieService();
 
-    private projects: ProjectModel[] = [
+    private projects: ProjectModel[] = reactive([
         {
             id: 0,
             title: "Project Title 0",
@@ -16,8 +17,8 @@ export class CrudService {
                     title: "Column 1",
                     order: 1,
                     postIts: [
-                        new PostItModel(0, "Card 1", 1,"Description 1", "red", new Date(), ["Alice", "Bob"], ["tag1", "tag2"]),
-                        new PostItModel(1, "Card 2", 2,"Description 2", "blue", new Date(), ["Alice", "Charlie"], ["tag2", "tag3"]),
+                        new PostItModel(0, "Card 1", 1, "Description 1", "red", new Date(), ["Alice", "Bob"], ["tag1", "tag2"]),
+                        new PostItModel(1, "Card 2", 2, "Description 2", "blue", new Date(), ["Alice", "Charlie"], ["tag2", "tag3"]),
                     ]
                 },
                 {
@@ -25,84 +26,34 @@ export class CrudService {
                     title: "Column 2",
                     order: 2,
                     postIts: [
-                        new PostItModel(2, "Card 3", 1,"Description 3", "green", new Date(), ["Bob", "Charlie"], ["tag1", "tag3"]),
-                        new PostItModel(3, "Card 4", 2,"Description 4", "yellow", new Date(), ["Alice", "Charlie"], ["tag1", "tag2"]),
+                        new PostItModel(2, "Card 3", 1, "Description 3", "green", new Date(), ["Bob", "Charlie"], ["tag1", "tag3"]),
+                        new PostItModel(3, "Card 4", 2, "Description 4", "yellow", new Date(), ["Alice", "Charlie"], ["tag1", "tag2"]),
                     ]
                 }
             ]
         },
-        {
-            id: 1,
-            title: "Project Title 1",
-            postItList: [
-                {
-                    id: 0,
-                    title: "Column 1",
-                    order: 1,
-                    postIts: [
-                        new PostItModel(0, "Card 1", 1,"Description 1", "red", new Date(), ["Alice", "Bob"], ["tag1", "tag2"]),
-                        new PostItModel(1, "Card 2", 2,"Description 2", "blue", new Date(), ["Alice", "Charlie"], ["tag2", "tag3"]),
-                    ]
-                },
-                {
-                    id: 1,
-                    title: "Column 2",
-                    order: 2,
-                    postIts: [
-                        new PostItModel(2, "Card 3", 1,"Description 3", "green", new Date(), ["Bob", "Charlie"], ["tag1", "tag3"]),
-                        new PostItModel(3, "Card 4", 2,"Description 4", "yellow", new Date(), ["Alice", "Charlie"], ["tag1", "tag2"]),
-                    ]
-                }
-            ]
-        },
-        {
-            id: 3,
-            title: "Project Title 3",
-            postItList: [
-                {
-                    id: 0,
-                    title: "Column 1",
-                    order: 1,
-                    postIts: [
-                        new PostItModel(0, "Card 1", 1,"Description 1", "red", new Date(), ["Alice", "Bob"], ["tag1", "tag2"]),
-                        new PostItModel(1, "Card 2", 2,"Description 2", "blue", new Date(), ["Alice", "Charlie"], ["tag2", "tag3"]),
-                    ]
-                },
-                {
-                    id: 1,
-                    title: "Column 2",
-                    order: 2,
-                    postIts: [
-                        new PostItModel(2, "Card 3", 1,"Description 3", "green", new Date(), ["Bob", "Charlie"], ["tag1", "tag3"]),
-                        new PostItModel(3, "Card 4", 2,"Description 4", "yellow", new Date(), ["Alice", "Charlie"], ["tag1", "tag2"]),
-                    ]
-                }
-            ]
-        }
-    ];
+    ]);
+    private recentProjectsLink: ProjectLinkModel[] = reactive([]);
 
-    getRecentProjects() : ProjectLinkModel[] {
-        let savedProjects = this.cookieService.getCookie<ProjectLinkModel[]>("recentProjects");
-        if (!savedProjects) {
-            savedProjects = [];
+    getRecentProjects(): ProjectLinkModel[] {
+        recentProjectsLink.value = this.cookieService.getCookie<ProjectLinkModel[]>("recentProjects");
+        if (!recentProjectsLink.value) {
+            recentProjectsLink.value = [];
         }
-        return savedProjects;
+        return recentProjectsLink;
     }
 
-    addRecentProject(project: ProjectModel) : void {
-        let savedProjects : ProjectLinkModel[] = this.getRecentProjects();
-        savedProjects = savedProjects.filter((p : ProjectLinkModel) : boolean => p.id !== project.id);
+    addRecentProject(project: ProjectModel): void {
+        let savedProjects: ProjectLinkModel[] = this.getRecentProjects();
+        savedProjects = savedProjects.filter((p: ProjectLinkModel): boolean => p.id !== project.id);
         savedProjects.unshift(new ProjectLinkModel(project.id, project.title));
         this.cookieService.setCookie("recentProjects", savedProjects);
     }
 
     // Get a specific project by ID
-    getProject(id: number) : ProjectModel | undefined {
-        console.log(this.projects);
-        const project : ProjectModel | undefined = this.projects.find((project) => {
-            return project.id === id;
-        });
-        if(project){
+    getProject(id: number): ProjectModel | undefined {
+        const project = this.projects.find((project) => project.id === id);
+        if (project) {
             this.addRecentProject(project);
         }
         return project;
