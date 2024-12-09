@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {Button, Drawer, Menu} from "primevue";
-import {ref} from "vue";
+import {inject, ref} from "vue";
 import {ProjectLinkModel} from "@/models/ProjectLinkModel";
+import {CrudService} from "@/services/CrudService";
 const visible : boolean = ref(false)
 
-const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new ProjectLinkModel("2", "project2")]
+const crudService : CrudService = inject('crudService')!;
+const projects : ProjectLinkModel[] = crudService.getRecentProjects();
 
 </script>
 
