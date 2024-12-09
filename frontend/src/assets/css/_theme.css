@@ -1,7 +1,21 @@
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+#app{
+    font-family: "Patrick Hand", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
 }
 
+* {
+    font-family: "Patrick Hand", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+}
+
+:root {
+    --color-black: #2c3e50;
+}
+
+a {
+    color: var(--color-black) !important;
+}
