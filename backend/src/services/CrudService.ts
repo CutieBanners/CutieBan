@@ -233,12 +233,12 @@ export class CRUDService {
         return await this.dbService.updateOne(projectId, project);
     }
 
-    async deleteProject(projectId: string): Promise<void> {
+    async deleteProject(projectId: string): Promise<number> {
         const project = await this.dbService.findOne<ProjectModel>(projectId);
         if (!project) {
             throw new Error(`Project with id ${projectId} not found`);
         }
 
-        await this.dbService.deleteOne(projectId);
+        return await this.dbService.deleteOne(projectId);
     }
 }
