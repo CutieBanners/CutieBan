@@ -2,6 +2,7 @@
 import {Button, Drawer, Menu} from "primevue";
 import {ref} from "vue";
 import {ProjectLinkModel} from "@/models/ProjectLinkModel";
+import HomeView from "@/views/HomeView.vue";
 const visible : boolean = ref(false)
 
 const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new ProjectLinkModel("2", "project2")]
@@ -11,6 +12,7 @@ const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new
 <template>
   <div class="card flex justify-center">
     <Drawer v-model:visible="visible" header="CutieBan">
+      <h3><RouterLink to="/"><i class="pi pi-home"></i> Home</RouterLink></h3>
       <h3><i class="pi pi-bookmark-fill"></i> Saved</h3>
       <ul>
         <div v-for="project in projects">

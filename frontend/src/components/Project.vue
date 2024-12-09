@@ -4,7 +4,8 @@ import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
 import { ref } from "vue";
-import { PostItModel } from "../models/PostItModel.ts"; // Import the PostItModel
+import { PostItModel } from "../models/PostItModel.ts";
+import Horizontal_rule from "@/components/horizontal_rule.vue"; // Import the PostItModel
 
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
@@ -44,9 +45,11 @@ const removeCard = (id: number) => {
 
 <template>
   <div class="project">
-    <h1>{{ model.title }}</h1>
+    <h1 class="chewy-regular text-7xl m-0">{{ model.title }}
+    <Horizontal_rule></Horizontal_rule>
+    </h1>
 
-    <draggable v-model="postItListRef" item-key="id" group="project" class="columns">
+    <draggable v-model="postItListRef" item-key="id" group="project" class="columns w-full">
       <template #item="{ element }">
         <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" />
       </template>
@@ -69,7 +72,7 @@ const removeCard = (id: number) => {
 .project {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .columns {

@@ -4,7 +4,7 @@ import Project from "@/views/ProjectView.vue";
 
 // Add routes here ! please !
 const routes = [
-    { path: '/', name: "Home", component: Home },
+    { path: '/', name: "home", component: Home },
     { path: '/project/:id', name: "project", component: Project },
 ]
 

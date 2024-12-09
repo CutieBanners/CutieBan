@@ -12,5 +12,4 @@ import ProjectCreation from "@/components/ProjectCreation.vue";
   height: 90vh;
 }
 
-
 </style>
