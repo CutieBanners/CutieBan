@@ -5,7 +5,7 @@ import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
 import { ref } from "vue";
 import { PostItModel } from "../models/PostItModel.ts";
-import Horizontal_rule from "@/components/horizontal_rule.vue"; // Import the PostItModel
+import Horizontal_rule from "@/components/HorizontalRule.vue"; // Import the PostItModel
 
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
