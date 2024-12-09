@@ -1,7 +1,11 @@
 import { ProjectModel } from "../models/ProjectModel";
 import { PostItModel } from "../models/PostItModel";
+import {LocalProjectInfoModel} from "@/models/LocalProjectInfoModel";
+import {CookieService} from "@/services/CookieService";
 
 export class CrudService {
+    private cookieService: CookieService = new CookieService();
+
     private projects: ProjectModel[] = [{
         id: 0,
         title: "Project Title",
@@ -27,21 +31,29 @@ export class CrudService {
         ]
     }];
 
-    // Get all projects
-    getProjects() {
-        return this.projects;
+    getRecentProjects() : LocalProjectInfoModel[] {
+        let savedProjects = this.cookieService.getCookie< LocalProjectInfoModel[]>("recentProjects");
+        if (!savedProjects) {
+            savedProjects = [];
+        }
+        return savedProjects;
+    }
+
+    addRecentProject(project: ProjectModel) {
+        let savedProjects = this.getRecentProjects();
+        savedProjects = savedProjects.filter((p) => p.id !== project.id);
+        savedProjects.unshift(new LocalProjectInfoModel(project.id, project.title));
+        this.cookieService.setCookie("recentProjects", savedProjects);
     }
 
     // Get a specific project by ID
     getProject(id: number) {
         console.log(this.projects);
-        return this.projects.find((project) => {
-            console.log(typeof project.id);
-            console.log(typeof id);
-            console.log(project.id);
-            console.log(id);
+        const project : ProjectModel | undefined = this.projects.find((project) => {
             return project.id === id;
         });
+        this.addRecentProject(project);
+        return project;
     }
 
     // Add a new project
