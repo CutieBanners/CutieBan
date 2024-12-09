@@ -45,7 +45,7 @@ const removeCard = (id: number) => {
 
 <template>
   <div class="project">
-    <h1 class="chewy-regular text-7xl m-0">{{ model.title }}
+    <h1 class="chewy-regular text-6xl m-0">{{ model.title }}
     <Horizontal_rule></Horizontal_rule>
     </h1>
 
