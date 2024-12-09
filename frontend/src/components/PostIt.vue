@@ -25,11 +25,5 @@ const handleClick = () => {
 </template>
 
 <style scoped>
-.post-it {
-  padding: 10px;
-  border: 1px solid #ccc;
-  margin-bottom: 5px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-}
+
 </style>

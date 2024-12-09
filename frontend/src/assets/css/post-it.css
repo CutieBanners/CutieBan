@@ -1,0 +1,30 @@
+/* Source : https://codepen.io/jweden/pen/kGBBpM */
+
+.post-it {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    position:relative;
+    background: #ffedaf;
+    overflow:hidden;
+    border-radius:0 0 0 30px/45px;
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}
+
+.post-it:before {
+    content:"";
+    display:block;
+    position:absolute;
+    width:20px;
+    height:25px;
+    background: #fbc421;
+    left:0;
+    bottom:0;
+    z-index:2;
+    transform:skewX(25deg);
+}
+
+.post-it * {
+    margin: 0;
+    padding: 0;
+}
