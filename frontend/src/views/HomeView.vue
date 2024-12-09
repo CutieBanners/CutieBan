@@ -9,7 +9,7 @@ import ProjectCreation from "@/components/ProjectCreation.vue";
 
 <style scoped>
 .height_90 {
-  height: 90vh;
+  height: 80vh;
 }
 
 </style>

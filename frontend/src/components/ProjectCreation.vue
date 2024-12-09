@@ -23,7 +23,7 @@ const handleSubmit = () => {
 
 <template>
   <div class="container">
-    <h1 class="chewy-regular" id="big_title">Hey, what′s the big idea?</h1>
+    <h1 class="chewy-regular text-center" id="big_title">Hey, what′s the big idea?</h1>
     <form @submit.prevent="handleSubmit">
       <InputText type="text" v-model="formData.name" placeholder="Lollipop"/>
       <button
