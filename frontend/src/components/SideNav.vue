@@ -17,8 +17,8 @@ const projects : ProjectLinkModel[] = crudService.getRecentProjects();
       <ul>
         <div v-for="project in projects">
           <RouterLink
-              v-if="project.id"
               :to="{ name: 'project', params: { id: project.id } }"
+              @click="visible = false"
           >
             <li>
               <i class="pi pi-angle-right"></i>
