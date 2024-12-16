@@ -13,6 +13,10 @@ const crudService = new CRUDService(dbService);
 
 app.use(express.json());
 
+/**
+ * Get a project by its ID.
+ * Example: GET /project/67570b25ab29009f4004fcee
+ */
 app.get('/project/:projectId', async (req: Request, res: Response) => {
   const projectId = req.params.projectId;
   const project = await crudService.getProject(projectId);
@@ -27,6 +31,11 @@ app.get('/project/:projectId', async (req: Request, res: Response) => {
   res.status(200).json(project);
 });
 
+/**
+ * Create a new project.
+ * Request body should contain the title of the project.
+ * Example: { "title": "My new project" }
+ */
 app.post('/project', async (req: Request, res: Response) => {
   const projectTitle = req.body.title;
   const project = await crudService.createProject(projectTitle);
@@ -35,6 +44,12 @@ app.post('/project', async (req: Request, res: Response) => {
   });
 });
 
+/**
+ * Update a project by its ID.
+ * Request body should contain the updated project data.
+ * Example: PUT /project/67570b25ab29009f4004fcee
+ * Request body: { "id": "67570b25ab29009f4004fcee", "title": "Updated project title", "postItList": [...] }
+ */
 app.put('/projects/:projectId', async (req, res) => {
   try {
     const { projectId } = req.params;
@@ -47,6 +62,10 @@ app.put('/projects/:projectId', async (req, res) => {
   }
 });
 
+/**
+ * Delete a project by its ID.
+ * Example: DELETE /project/67570b25ab29009f4004fcee
+ */
 app.delete('/projects/:projectId', async (req, res) => {
   try {
       const { projectId } = req.params;
