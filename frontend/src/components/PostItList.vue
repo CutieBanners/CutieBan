@@ -69,7 +69,7 @@ const drag = ref(false);
           <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
         </template>
         <template #footer>
-          <button @click="addPostIt">Add</button>
+          <div class="post-it h-3rem opacity-50 text-center" @click="addPostIt">+</div>
         </template>
       </draggable>
     </transition-group>

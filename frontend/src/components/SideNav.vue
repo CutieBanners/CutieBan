@@ -2,7 +2,6 @@
 import {Button, Drawer, Menu} from "primevue";
 import {ref} from "vue";
 import {ProjectLinkModel} from "@/models/ProjectLinkModel";
-import HomeView from "@/views/HomeView.vue";
 const visible : boolean = ref(false)
 
 const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new ProjectLinkModel("2", "project2")]

@@ -5,7 +5,8 @@ import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
 import { ref } from "vue";
 import { PostItModel } from "../models/PostItModel.ts";
-import Horizontal_rule from "@/components/HorizontalRule.vue"; // Import the PostItModel
+import Horizontal_rule from "@/components/HorizontalRule.vue";
+import {Button} from "primevue";
 
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
@@ -64,17 +65,14 @@ const drag = ref(false);
         <draggable v-model="postItListRef" item-key="id" group="project" class="project h-85" v-bind="dragOptions" @start="drag = true"
                    @end="drag = false">
           <template #item="{ element }">
-            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="w-250px vl"/>
+            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="w-250px vertical_line"/>
           </template>
           <template #footer>
-            <button @click="addColumn" class="h-fit p-2 border-round-sm">Add Column</button>
+            <Button @click="addColumn" class="h-fit p-2 w-250px border-2">Add Column</Button>
           </template>
         </draggable>
       </transition-group>
     </div>
-
-
-
 
     <!-- Modal Component -->
     <Modal
@@ -92,7 +90,6 @@ const drag = ref(false);
   flex-wrap: nowrap;
   width: 100%;
   overflow-x: auto;
-
 }
 
 .w-250px {
@@ -103,7 +100,7 @@ const drag = ref(false);
   height: 85vh;
 }
 
-.vl {
+.vertical_line {
   border-right: 2px dashed;
   height: 90vh;
   margin-right: 10px;

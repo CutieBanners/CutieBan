@@ -22,7 +22,7 @@ const handleDrag = (event) => {
   event.target.style.opacity = '0';
   setTimeout(() => {
     event.target.style.opacity = '1';
-  }, 10);
+  }, 1);
 };
 </script>
 
