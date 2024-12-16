@@ -15,10 +15,19 @@ const emit = defineEmits<{
 const handleClick = () => {
   emit("cardClick", model, projectId, columnId);
 };
+
+
+const handleDrag = (event) => {
+  // Rendre l'élément transparent
+  event.target.style.opacity = '0';
+  setTimeout(() => {
+    event.target.style.opacity = '1';
+  }, 10);
+};
 </script>
 
 <template>
-  <div class="post-it" @click="handleClick">
+  <div class="post-it" @click="handleClick"  @dragstart="handleDrag">
     <h2>{{ model.title }}</h2>
     <p>{{ model.description }}</p>
   </div>
