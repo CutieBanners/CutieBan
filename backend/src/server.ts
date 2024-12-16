@@ -1,10 +1,6 @@
 import express, { Request, Response } from 'express';
-import { PostItListModel } from './models/PostItListModel';
-import { PostItModel } from './models/PostItModel';
-import { ProjectModel } from './models/ProjectModel';
 import { CRUDService } from './services/CrudService';
 import { DatabaseService } from './services/DatabaseService';
-import { get } from 'http';
 
 
 const app = express();
@@ -15,9 +11,9 @@ app.use(express.json());
 
 /**
  * Get a project by its ID.
- * Example: GET /project/67570b25ab29009f4004fcee
+ * Example: GET /projects/67570b25ab29009f4004fcee
  */
-app.get('/project/:projectId', async (req: Request, res: Response) => {
+app.get('/projects/:projectId', async (req: Request, res: Response) => {
   const projectId = req.params.projectId;
   const project = await crudService.getProject(projectId);
 
@@ -36,7 +32,7 @@ app.get('/project/:projectId', async (req: Request, res: Response) => {
  * Request body should contain the title of the project.
  * Example: { "title": "My new project" }
  */
-app.post('/project', async (req: Request, res: Response) => {
+app.post('/projects', async (req: Request, res: Response) => {
   const projectTitle = req.body.title;
   const project = await crudService.createProject(projectTitle);
   res.status(201).json({
@@ -47,7 +43,7 @@ app.post('/project', async (req: Request, res: Response) => {
 /**
  * Update a project by its ID.
  * Request body should contain the updated project data.
- * Example: PUT /project/67570b25ab29009f4004fcee
+ * Example: PUT /projects/67570b25ab29009f4004fcee
  * Request body: { "id": "67570b25ab29009f4004fcee", "title": "Updated project title", "postItList": [...] }
  */
 app.put('/projects/:projectId', async (req, res) => {
@@ -64,7 +60,7 @@ app.put('/projects/:projectId', async (req, res) => {
 
 /**
  * Delete a project by its ID.
- * Example: DELETE /project/67570b25ab29009f4004fcee
+ * Example: DELETE /projects/67570b25ab29009f4004fcee
  */
 app.delete('/projects/:projectId', async (req, res) => {
   try {
