@@ -33,29 +33,10 @@ export class CrudService {
             ]
         },
     ]);
-    private recentProjectsLink: ProjectLinkModel[] = reactive([]);
-
-    getRecentProjects(): ProjectLinkModel[] {
-        recentProjectsLink.value = this.cookieService.getCookie<ProjectLinkModel[]>("recentProjects");
-        if (!recentProjectsLink.value) {
-            recentProjectsLink.value = [];
-        }
-        return recentProjectsLink;
-    }
-
-    addRecentProject(project: ProjectModel): void {
-        let savedProjects: ProjectLinkModel[] = this.getRecentProjects();
-        savedProjects = savedProjects.filter((p: ProjectLinkModel): boolean => p.id !== project.id);
-        savedProjects.unshift(new ProjectLinkModel(project.id, project.title));
-        this.cookieService.setCookie("recentProjects", savedProjects);
-    }
 
     // Get a specific project by ID
     getProject(id: number): ProjectModel | undefined {
         const project = this.projects.find((project) => project.id === id);
-        if (project) {
-            this.addRecentProject(project);
-        }
         return project;
     }
 

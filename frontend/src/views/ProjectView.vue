@@ -3,8 +3,10 @@ import Project from "@/components/Project.vue";
 import { inject, ref, watch } from "vue";
 import { CrudService } from "@/services/CrudService.ts";
 import { useRoute } from "vue-router";
+import {RecentProjectsService} from "@/services/RecentProjectsService";
 
 const crudService: CrudService = inject('crudService')!;
+const recentProjects: RecentProjectsService = inject('recentProjectsService')!;
 const route = useRoute();
 
 // Reactive reference for project
@@ -13,6 +15,9 @@ const project = ref(null);
 // Function to load the project
 const loadProject = (id: number) => {
   project.value = crudService.getProject(id);
+  if (project) {
+    recentProjects.addRecentProject(project);
+  }
 };
 
 watch(
