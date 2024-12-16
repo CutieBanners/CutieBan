@@ -53,7 +53,7 @@ const drag = ref(false);
 
 <template>
   <div class="">
-    <div class="flex align-items-center justify-content-between cursor-pointer">
+    <div class="flex align-items-center justify-content-between cursor-pointer h-3rem">
       <i class="pi pi-arrows-h"></i>
       <!-- Editable title -->
       <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />

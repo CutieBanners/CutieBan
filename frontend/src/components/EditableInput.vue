@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits, nextTick, computed } from "vue";
+import { FloatLabel, InputText } from "primevue";
 
 // Props
 const props = defineProps<{
@@ -14,7 +15,7 @@ const emit = defineEmits<{
 
 // Local state for edit mode
 const isEditing = ref(false);
-const inputRef = ref<HTMLInputElement | null>(null);
+let inputRef;
 
 // Computed property to handle `v-model` binding
 const editableValue = computed({
@@ -25,7 +26,8 @@ const editableValue = computed({
 const startEditing = async () => {
   isEditing.value = true;
   await nextTick(); // Ensure DOM updates
-  inputRef.value?.focus(); // Focus on the input field
+  inputRef = document.getElementById("in_label")
+  inputRef.focus(); // Focus on the input field
 };
 
 const finishEditing = () => {
@@ -48,22 +50,31 @@ const handleKeydown = (event: KeyboardEvent) => {
     </div>
 
     <!-- Edit Mode -->
-    <input
-        v-else
-        ref="inputRef"
-        v-model="editableValue"
-        @blur="finishEditing"
-        @keydown="handleKeydown"
-        class="editable-input"
-    />
+    <FloatLabel v-else class="ml-2 text-overflow-clip">
+      <InputText
+          id="in_label"
+          autocomplete="off"
+          ref="inputRef"
+          v-model="editableValue"
+          @blur="finishEditing"
+          @keydown="handleKeydown"
+          class="editable-input"
+          :autofocus="isEditing"
+      />
+    </FloatLabel>
+
   </div>
 </template>
 
 <style scoped>
 .editable-text {
+  width: 150px;
   font-size: 1.5rem;
   text-align: center;
   cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
 }
 
 .editable-input {
