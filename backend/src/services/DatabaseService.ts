@@ -1,5 +1,8 @@
 import { MongoClient, Db, Collection, ObjectId } from 'mongodb';
 
+/**
+ * A service for interacting with a MongoDB database.
+ */
 export class DatabaseService {
     private client: MongoClient;
     private db: Db;
