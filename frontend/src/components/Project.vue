@@ -41,6 +41,14 @@ const removeCard = (id: number) => {
     selectedCard.value = null; // Reset the selected card
   }
 };
+const dragOptions = ref({
+  animation: 200,
+  disabled: false,
+  ghostClass: 'ghost',
+});
+
+const drag = ref(false);
+
 </script>
 
 <template>
@@ -52,15 +60,20 @@ const removeCard = (id: number) => {
     </div>
 
     <div class="">
-      <draggable v-model="postItListRef" item-key="id" group="project" class="project h-85">
-        <template #item="{ element }">
-          <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="w-250px vl"/>
-        </template>
-        <template #footer>
-          <button @click="addColumn" class="h-fit p-2 border-round-sm">Add Column</button>
-        </template>
-      </draggable>
+      <transition-group>
+        <draggable v-model="postItListRef" item-key="id" group="project" class="project h-85" v-bind="dragOptions" @start="drag = true"
+                   @end="drag = false">
+          <template #item="{ element }">
+            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="w-250px vl"/>
+          </template>
+          <template #footer>
+            <button @click="addColumn" class="h-fit p-2 border-round-sm">Add Column</button>
+          </template>
+        </draggable>
+      </transition-group>
     </div>
+
+
 
 
     <!-- Modal Component -->

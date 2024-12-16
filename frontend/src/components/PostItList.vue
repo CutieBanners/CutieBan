@@ -39,6 +39,16 @@ const addPostIt = () => {
 const handleTitleEditFinished = () => {
   console.log("Title editing finished. New title:", model.title);
 };
+
+const dragOptions = ref({
+  animation: 200,
+  group: 'description',
+  disabled: false,
+  ghostClass: 'ghost',
+});
+
+const drag = ref(false);
+
 </script>
 
 <template>
@@ -52,19 +62,21 @@ const handleTitleEditFinished = () => {
     </div>
 
     <!-- Draggable post-it container -->
-    <draggable v-model="postItRef" item-key="id" group="postItList">
-      <template #item="{ element }">
-        <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
-      </template>
-      <template #footer>
-        <button @click="addPostIt">Add</button>
-      </template>
-    </draggable>
+    <transition-group>
+      <draggable v-model="postItRef" item-key="id" group="postItList" class="h-full" v-bind="dragOptions" @start="drag = true"
+                 @end="drag = false">
+        <template #item="{ element }">
+          <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
+        </template>
+        <template #footer>
+          <button @click="addPostIt">Add</button>
+        </template>
+      </draggable>
+    </transition-group>
   </div>
 </template>
 
 <style scoped>
-
 .remove-button {
   color: #ff4d4f;
 }
