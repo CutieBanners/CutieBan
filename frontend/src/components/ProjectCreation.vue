@@ -19,11 +19,55 @@ const handleSubmit = () => {
   }
 };
 
+document.querySelectorAll(".bouncing-letters>span")
+    .forEach((element) => {
+      element.addEventListener("mouseover",
+          (e) => bounce(e.target));
+    });
+
+function bounce(letter) {
+  if (!letter.classList.contains("bounce")) {
+    letter.classList.add("bounce");
+    setTimeout(
+        function () {
+          letter.classList.remove("bounce");
+        },
+        1000
+    );
+  }
+}
+
 </script>
 
 <template>
   <div class="container">
-    <h1 class="chewy-regular text-center" id="big_title">Hey, what′s the big idea?</h1>
+    <h1 class="chewy-regular text-center bouncing-letters xl:h-10rem flex align-items-center" id="big_title" style="letter-spacing:0.3px;">
+      <span>H</span>
+      <span>e</span>
+      <span>y</span>
+      <span>,</span>
+      <span>&nbsp;</span>
+      <span>w</span>
+      <span>h</span>
+      <span>a</span>
+      <span>t</span>
+      <span>′</span>
+      <span>s</span>
+      <span>&nbsp;</span>
+      <span>t</span>
+      <span>h</span>
+      <span>e</span>
+      <span>&nbsp;</span>
+      <span>b</span>
+      <span>i</span>
+      <span>g</span>
+      <span>&nbsp;</span>
+      <span>i</span>
+      <span>d</span>
+      <span>e</span>
+      <span>a</span>
+      <span>?</span>
+    </h1>
     <form @submit.prevent="handleSubmit">
       <InputText type="text" v-model="formData.name" placeholder="Lollipop"/>
       <button
@@ -111,6 +155,24 @@ const handleSubmit = () => {
 
   .shake {
     animation: shake 0.5s ease;
+  }
+
+  @media only screen and (max-width: 600px) {
+    #big_title {
+      font-size: 2rem;
+    }
+  }
+
+  @media only screen and (min-width: 600px) {
+    .bouncing-letters span {
+      transition: font-size ease-in-out .1s;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .bouncing-letters span:hover {
+      font-size: 8rem;
+    }
   }
 
 </style>
