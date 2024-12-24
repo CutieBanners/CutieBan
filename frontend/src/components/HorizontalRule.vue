@@ -5,9 +5,9 @@
 <template>
   <div class="custom-hr">
     <svg
-        width="255"
+        width="100"
         height="15"
-        viewBox="0 0 255 15"
+        viewBox="0 0 100 15"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >

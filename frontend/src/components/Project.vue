@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ProjectModel } from "../models/ProjectModel.ts";
+import { ProjectModel } from "@/models/ProjectModel.ts";
 import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
 import { ref } from "vue";
-import { PostItModel } from "../models/PostItModel.ts";
+import { PostItModel } from "@/models/PostItModel.ts";
 import Horizontal_rule from "@/components/HorizontalRule.vue";
 import {Button} from "primevue";
 
@@ -55,20 +55,20 @@ const drag = ref(false);
 <template>
   <div class="">
     <div class="flex justify-content-center">
-      <h1 class="chewy-regular text-6xl m-0">{{ model.title }}
+      <h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ model.title }}
         <Horizontal_rule></Horizontal_rule>
       </h1>
     </div>
 
     <div class="">
       <transition-group>
-        <draggable v-model="postItListRef" item-key="id" group="project" class="project h-85" v-bind="dragOptions" @start="drag = true"
+        <draggable v-model="postItListRef" item-key="id" group="project" class="project" v-bind="dragOptions" @start="drag = true"
                    @end="drag = false">
           <template #item="{ element }">
-            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="w-250px vertical_line"/>
+            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="h-full column-width vertical_line"/>
           </template>
           <template #footer>
-            <Button @click="addColumn" class="h-fit p-2 w-250px border-2">Add Column</Button>
+            <Button @click="addColumn" class="h-fit p-2 column-width border-2">Add Column</Button>
           </template>
         </draggable>
       </transition-group>
@@ -92,19 +92,19 @@ const drag = ref(false);
   overflow-x: auto;
 }
 
-.w-250px {
-  flex: 0 0 250px;
-}
-
-.h-85 {
-  height: 85vh;
-}
-
 .vertical_line {
   border-right: 2px dashed;
-  height: 90vh;
   margin-right: 10px;
   padding-right: 10px;
 }
 
+.column-width {
+  flex: 0 0 250px;
+}
+
+@media only screen and (max-width: 600px) {
+  .column-width {
+    flex: 0 0 100px;
+  }
+}
 </style>

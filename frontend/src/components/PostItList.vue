@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { PostItListModel } from "../models/PostItListModel.ts";
+import { PostItListModel } from "@/models/PostItListModel.ts";
 import { ref, watch } from "vue";
 import PostIt from "./PostIt.vue";
 import Draggable from "vuedraggable";
 import EditableInput from "./EditableInput.vue";
-import {PostItModel} from "../models/PostItModel.ts";
+import {PostItModel} from "@/models/PostItModel.ts";
 
 const { model } = defineProps<{
   model: PostItListModel,
@@ -63,7 +63,7 @@ const drag = ref(false);
 
     <!-- Draggable post-it container -->
     <transition-group>
-      <draggable v-model="postItRef" item-key="id" group="postItList" class="h-full" v-bind="dragOptions" @start="drag = true"
+      <draggable v-model="postItRef" item-key="id" group="postItList" class="h-85" v-bind="dragOptions" @start="drag = true"
                  @end="drag = false">
         <template #item="{ element }">
           <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
@@ -83,5 +83,10 @@ const drag = ref(false);
 
 .remove-button:hover {
   color: #d9363e;
+}
+
+.h-85 {
+  height: 87vh;
+  overflow: auto;
 }
 </style>
