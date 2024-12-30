@@ -54,7 +54,7 @@ const drag = ref(false);
 <template>
   <div class="">
     <div class="flex align-items-center justify-content-between cursor-pointer h-3rem">
-      <i class="pi pi-arrows-h"></i>
+      <i class="pi pi-arrows-h drag-handle"></i>
       <!-- Editable title -->
       <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
       <!-- Button to remove the column -->
@@ -63,7 +63,7 @@ const drag = ref(false);
 
     <!-- Draggable post-it container -->
     <transition-group>
-      <draggable v-model="postItRef" item-key="id" group="postItList" class="h-85" v-bind="dragOptions" @start="drag = true"
+      <draggable v-model="postItRef" item-key="id" group="postItList" class="h-80" v-bind="dragOptions" @start="drag = true"
                  @end="drag = false">
         <template #item="{ element }">
           <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
@@ -85,8 +85,8 @@ const drag = ref(false);
   color: #d9363e;
 }
 
-.h-85 {
-  height: 87vh;
+.h-80 {
+  height: 80vh;
   overflow: auto;
 }
 </style>

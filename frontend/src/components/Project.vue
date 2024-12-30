@@ -10,6 +10,11 @@ import {Button} from "primevue";
 
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
+const scrollContainer = ref(null); // Reference to the scroll container
+const isScrolling = ref(false); // Flag to disable draggable during scrolling
+const isDragging = ref(false); // Flag to track dragging
+const startX = ref(0); // Initial mouse position
+const scrollLeft = ref(0); // Initial scroll position
 
 const selectedCard = ref<{ card: PostItModel, projectId: number, columnId: number } | null>(null);
 
@@ -62,8 +67,15 @@ const drag = ref(false);
 
     <div class="">
       <transition-group>
-        <draggable v-model="postItListRef" item-key="id" group="project" class="project" v-bind="dragOptions" @start="drag = true"
-                   @end="drag = false">
+        <draggable
+            v-model="postItListRef"
+            item-key="id" group="project"
+            class="project"
+            v-bind="dragOptions"
+            @start="drag = true"
+            :handle="'.drag-handle'"
+            @end="drag = false"
+        >
           <template #item="{ element }">
             <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="h-full column-width vertical_line"/>
           </template>
