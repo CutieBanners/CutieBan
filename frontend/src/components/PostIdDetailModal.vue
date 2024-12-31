@@ -2,7 +2,9 @@
 import {defineProps, defineEmits, inject} from "vue";
 import { PostItModel } from "../models/PostItModel";
 import EditableInput from "./EditableInput.vue";
-import {CrudService} from "../services/CrudService.ts"; // Import the EditableInput component
+import {CrudService} from "../services/CrudService.ts";
+import Editor from 'primevue/editor';
+
 
 // Props to accept a PostItModel instance
 const { selectedCard } = defineProps<{ selectedCard: { card: PostItModel, projectId: number, columnId: number } }>();
@@ -34,21 +36,26 @@ const removeCard = () => {
 
 <template>
   <div class="modal-overlay" @click="closeModal">
-    <div class="modal" @click.stop>
-      <h2>Edit Post-It</h2>
+    <div class="w-10 p-3 post-it" @click.stop>
 
       <!-- Editable Title -->
-      <EditableInput
-          v-model="postIt.title"
-          @update:modelValue="updateTitle"
-          class="editable-input"
-      />
+      <div class="flex align-items-center h-3rem w-full">
+        <i class="pi pi-pen-to-square"></i>
+        <EditableInput
+            v-model="postIt.title"
+            @update:modelValue="updateTitle"
+            class="w-full cursor-pointer"
+        />
+        <i class="pi pi-times cursor-pointer" @click="closeModal"></i>
+      </div>
 
       <!-- Editable Description -->
-      <EditableInput
+      <h2>Description</h2>
+      <Editor
+          editorStyle="height: 320px"
           v-model="postIt.description"
           @update:modelValue="updateDescription"
-          class="editable-input"
+          class="editor_text_sizing"
       />
 
       <ul>
@@ -58,7 +65,6 @@ const removeCard = () => {
       </ul>
 
       <div class="modal-buttons">
-        <button @click="closeModal">Close</button>
         <button @click="removeCard">Remove Card</button> <!-- Remove Card Button -->
       </div>
     </div>
@@ -78,12 +84,6 @@ const removeCard = () => {
   align-items: center;
 }
 
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-}
 
 .modal-buttons {
   display: flex;
@@ -102,5 +102,9 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.p-editor * {
+  font-size: 1rem;
 }
 </style>

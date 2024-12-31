@@ -68,7 +68,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 <style scoped>
 .editable-text {
-  width: 150px;
+  width: 100%;
   font-size: 1.5rem;
   text-align: center;
   cursor: pointer;
@@ -78,7 +78,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 }
 
 .editable-input {
-  width: calc(100% - 8px);
+  width: 100%;
   padding: 5px;
   font-size: 1.5rem;
   text-align: center;

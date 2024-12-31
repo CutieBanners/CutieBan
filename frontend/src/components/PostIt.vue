@@ -29,7 +29,7 @@ const handleDrag = (event) => {
 <template>
   <div class="post-it" @click="handleClick"  @dragstart="handleDrag">
     <h2>{{ model.title }}</h2>
-    <p>{{ model.description }}</p>
+    <div v-html="model.description"></div>
   </div>
 </template>
 

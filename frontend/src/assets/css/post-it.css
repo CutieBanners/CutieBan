@@ -24,7 +24,7 @@
     transform:skewX(25deg);
 }
 
-.post-it * {
+.post-it h2, .post-it p {
     margin: 0;
     padding: 0;
 }
