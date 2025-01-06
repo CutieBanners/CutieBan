@@ -1,36 +1,45 @@
 <script setup lang="ts">
 import Project from "@/components/Project.vue";
-import { inject, ref, watch } from "vue";
-import { CrudService } from "@/services/CrudService.ts";
+import { inject, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import {RecentProjectsService} from "@/services/RecentProjectsService";
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import {ProjectModel} from "@/models/ProjectModel";
 
-const crudService: CrudService = inject('crudService')!;
 const recentProjects: RecentProjectsService = inject('recentProjectsService')!;
+const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 const route = useRoute();
 
 // Reactive reference for project
-const project = ref(null);
+let project : ProjectModel | null = null;
+const hasProject = ref(false);
 
 // Function to load the project
-const loadProject = (id: string) => {
-  project.value = crudService.getProject(id);
-  if (project) {
-    recentProjects.addRecentProject(project);
+const loadProject = async (id: string) => {
+  try {
+    await projectService.fetchProject(id);
+    project = projectService.currentProject;
+    if (project) {
+      hasProject.value = true;
+      recentProjects.addRecentProject(project);
+    }
+  } catch (e) {
+    hasProject.value = false;
+    console.error(e);
   }
 };
 
 watch(
     () => route.params.id,
     (newId, oldId) => {
-      loadProject(Number(newId));
+      loadProject(newId);
     },
     { immediate: true }
 );
 </script>
 
 <template>
-  <Project :model="project"></Project>
+  <Project :model="project" v-if="hasProject"></Project>
 </template>
 
 <style scoped>
