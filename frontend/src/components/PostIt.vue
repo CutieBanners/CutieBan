@@ -16,9 +16,7 @@ const handleClick = () => {
   emit("cardClick", model, projectId, columnId);
 };
 
-
 const handleDrag = (event) => {
-  // Rendre l'élément transparent
   event.target.style.opacity = '0';
   setTimeout(() => {
     event.target.style.opacity = '1';
@@ -27,12 +25,20 @@ const handleDrag = (event) => {
 </script>
 
 <template>
-  <div class="post-it" @click="handleClick"  @dragstart="handleDrag">
-    <h2>{{ model.title }}</h2>
-    <div v-html="model.description"></div>
+  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick"  @dragstart="handleDrag">
+    <h2 class="overflow-hidden white-space-nowrap text-overflow-ellipsis">{{ model.title }}</h2>
+    <div v-html="model.description" class="max-w-10rem overflow-hidden"></div>
   </div>
 </template>
 
 <style scoped>
+.column-width {
+  max-width: 250px;
+}
 
+@media only screen and (max-width: 600px) {
+  .column-width {
+    max-width: 100px;
+  }
+}
 </style>

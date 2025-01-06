@@ -39,12 +39,12 @@ const removeCard = () => {
     <div class="w-10 p-3 post-it" @click.stop>
 
       <!-- Editable Title -->
-      <div class="flex align-items-center h-3rem w-full">
+      <div class="flex align-items-center justify-content-between h-3rem w-full">
         <i class="pi pi-pen-to-square"></i>
         <EditableInput
             v-model="postIt.title"
             @update:modelValue="updateTitle"
-            class="w-full cursor-pointer"
+            class="cursor-pointer header-card-name"
         />
         <i class="pi pi-times cursor-pointer" @click="closeModal"></i>
       </div>
@@ -89,6 +89,10 @@ const removeCard = () => {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+}
+
+.header-card-name {
+  max-width: 90%;
 }
 
 button {

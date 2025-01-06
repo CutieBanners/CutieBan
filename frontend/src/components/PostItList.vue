@@ -56,7 +56,7 @@ const drag = ref(false);
     <div class="flex align-items-center justify-content-between cursor-pointer h-3rem">
       <i class="pi pi-arrows-h drag-handle"></i>
       <!-- Editable title -->
-      <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
+      <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" class="max-w-10rem overflow-hidden"/>
       <!-- Button to remove the column -->
       <i class="pi pi-trash remove-button" @click="$emit('removeColumn', model.id)"></i>
     </div>
