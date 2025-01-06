@@ -13,7 +13,7 @@ const route = useRoute();
 const project = ref(null);
 
 // Function to load the project
-const loadProject = (id: number) => {
+const loadProject = (id: string) => {
   project.value = crudService.getProject(id);
   if (project) {
     recentProjects.addRecentProject(project);

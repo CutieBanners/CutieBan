@@ -12,8 +12,8 @@ const { model } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "removeColumn", columnId: number): void;
-  (e: "cardClick", card: PostItModel, projectId: number, columnId: number): void;
+  (e: "removeColumn", columnId: string): void;
+  (e: "cardClick", card: PostItModel, projectId: string, columnId: string): void;
 }>();
 
 const postItRef = ref(model.postIts);

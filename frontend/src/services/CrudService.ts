@@ -35,7 +35,7 @@ export class CrudService {
     ]);
 
     // Get a specific project by ID
-    getProject(id: number): ProjectModel | undefined {
+    getProject(id: string): ProjectModel | undefined {
         const project = this.projects.find((project) => project.id === id);
         return project;
     }
@@ -47,7 +47,7 @@ export class CrudService {
     }
 
     // Update a project's title
-    updateProject(id: number, title: string) {
+    updateProject(id: string, title: string) {
         const project = this.getProject(id);
         if (project) {
             project.title = title;
@@ -55,7 +55,7 @@ export class CrudService {
     }
 
     // Delete a project
-    deleteProject(id: number) {
+    deleteProject(id: string) {
         const index = this.projects.findIndex(project => project.id === id);
         if (index !== -1) {
             this.projects.splice(index, 1);
@@ -65,7 +65,7 @@ export class CrudService {
     // Manage columns (postItList) within a project
 
     // Add a new column to a project
-    addColumnToProject(projectId: number, columnTitle: string) {
+    addColumnToProject(projectId: string, columnTitle: string) {
         const project = this.getProject(projectId);
         if (project) {
             const newColumn = {
@@ -79,7 +79,7 @@ export class CrudService {
     }
 
     // Remove a column from a project
-    removeColumnFromProject(projectId: number, columnId: number) {
+    removeColumnFromProject(projectId: string, columnId: string) {
         const project = this.getProject(projectId);
         if (project) {
             const index = project.postItList.findIndex(column => column.id === columnId);
@@ -92,7 +92,7 @@ export class CrudService {
     // Manage postIts (cards) within columns
 
     // Add a new postIt to a column
-    addPostItToColumn(projectId: number, columnId: number, postIt: PostItModel) {
+    addPostItToColumn(projectId: string, columnId: string, postIt: PostItModel) {
         const project = this.getProject(projectId);
         if (project) {
             const column = project.postItList.find(col => col.id === columnId);
@@ -103,7 +103,7 @@ export class CrudService {
     }
 
     // Update a postIt within a column
-    updatePostItInColumn(projectId: number, columnId: number, postItId: number, updatedPostIt: PostItModel) {
+    updatePostItInColumn(projectId: string, columnId: string, postItId: string, updatedPostIt: PostItModel) {
         const project = this.getProject(projectId);
         if (project) {
             const column = project.postItList.find(col => col.id === columnId);
@@ -117,7 +117,7 @@ export class CrudService {
     }
 
     // Delete a postIt from a column
-    deletePostItFromColumn(projectId: number, columnId: number, postItId: number) {
+    deletePostItFromColumn(projectId: string, columnId: string, postItId: string) {
         const project = this.getProject(projectId);
         if (project) {
             const column = project.postItList.find(col => col.id === columnId);
@@ -133,7 +133,7 @@ export class CrudService {
     // CRUD Operations for PostItModel (direct)
 
     // Add a new postIt globally (not tied to a column, but specifying projectId and columnId)
-    createPostIt(projectId: number, columnId: number, postIt: PostItModel) {
+    createPostIt(projectId: string, columnId: string, postIt: PostItModel) {
         const project = this.getProject(projectId);
         if (project) {
             const column = project.postItList.find(col => col.id === columnId);
@@ -144,7 +144,7 @@ export class CrudService {
     }
 
     // Update a postIt globally (searching through all columns of a project)
-    updatePostIt(projectId: number, columnId: number, postItId: number, updatedPostIt: PostItModel) {
+    updatePostIt(projectId: string, columnId: string, postItId: string, updatedPostIt: PostItModel) {
         const project = this.getProject(projectId);
         if (project) {
             const column = project.postItList.find(col => col.id === columnId);
@@ -158,7 +158,7 @@ export class CrudService {
     }
 
     // Delete a postIt globally (searching through all columns of a project)
-    deletePostIt(projectId: number, columnId: number, postItId: number) {
+    deletePostIt(projectId: string, columnId: string, postItId: string) {
         const project = this.getProject(projectId);
         if (project) {
             const column = project.postItList.find(col => col.id === columnId);

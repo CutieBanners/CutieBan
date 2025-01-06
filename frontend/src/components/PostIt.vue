@@ -9,7 +9,7 @@ const { model, projectId, columnId } = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "cardClick", card: PostItModel, projectId: number, columnId: number): void;
+  (e: "cardClick", card: PostItModel, projectId: string, columnId: string): void;
 }>();
 
 const handleClick = () => {

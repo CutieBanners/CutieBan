@@ -9,7 +9,7 @@ import { PostItModel } from "../models/PostItModel.ts"; // Import the PostItMode
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
 
-const selectedCard = ref<{ card: PostItModel, projectId: number, columnId: number } | null>(null);
+const selectedCard = ref<{ card: PostItModel, projectId: string, columnId: string } | null>(null);
 
 const addColumn = () => {
   postItListRef.value.push({
@@ -19,11 +19,11 @@ const addColumn = () => {
   });
 };
 
-const removeColumn = (columnId: number) => {
+const removeColumn = (columnId: string) => {
   postItListRef.value = postItListRef.value.filter((column) => column.id !== columnId);
 };
 
-const handleCardClick = (card: PostItModel, projectId: number, columnId: number) => {
+const handleCardClick = (card: PostItModel, projectId: string, columnId: string) => {
   selectedCard.value = { card, projectId, columnId };
 };
 
@@ -32,7 +32,7 @@ const closeModal = () => {
 };
 
 // Handle removing a card
-const removeCard = (id: number) => {
+const removeCard = (id: string) => {
   if (selectedCard.value) {
     model.postItList = model.postItList.filter((column) =>
         column.postIts.every(postIt => postIt.id !== id) // Remove the card with matching id
