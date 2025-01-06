@@ -38,7 +38,7 @@ const handleDrag = (event) => {
 
 @media only screen and (max-width: 600px) {
   .column-width {
-    max-width: 100px;
+    max-width: 150px;
   }
 }
 </style>

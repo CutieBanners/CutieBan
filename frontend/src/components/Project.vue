@@ -116,7 +116,7 @@ const drag = ref(false);
 
 @media only screen and (max-width: 600px) {
   .column-width {
-    flex: 0 0 100px;
+    flex: 0 0 150px;
   }
 }
 </style>
