@@ -32,9 +32,7 @@ export class CRUDService {
      */
     async getProject(projectId: string): Promise<ProjectModel> {
         let project = await this.dbService.findOne<ProjectModel>(projectId);
-        if (!project) {
-            throw new Error(`Project with id ${projectId} not found`);
-        }
+        if (!project) return null;
 
         project.postItList = this.sortByOrder(project.postItList);
         project.postItList.forEach((postItList) => {
@@ -51,9 +49,7 @@ export class CRUDService {
      */
     async updateProject(projectId: string, project: ProjectModel ): Promise<number> {
         const existingProject = await this.dbService.findOne<ProjectModel>(projectId);
-        if (!existingProject) {
-            throw new Error(`Project with id ${projectId} not found`);
-        }
+        if (!existingProject) return null;
 
         Object.assign(existingProject, project);
 
@@ -68,9 +64,7 @@ export class CRUDService {
      */
     async deleteProject(projectId: string): Promise<number> {
         const project = await this.dbService.findOne<ProjectModel>(projectId);
-        if (!project) {
-            throw new Error(`Project with id ${projectId} not found`);
-        }
+        if (!project) return null;
 
         return await this.dbService.deleteOne(projectId);
     }
