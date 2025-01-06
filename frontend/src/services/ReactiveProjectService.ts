@@ -2,10 +2,18 @@ import { reactive, watch, WatchStopHandle } from "vue";
 import { ProjectModel } from "../models/ProjectModel";
 import { PostItModel } from "../models/PostItModel";
 import { axiosInstance } from "./AxiosInstance";
+import { ProjectWebSocketService } from "./ProjectWebSocketService";
 
 export class ReactiveProjectService {
     private project: ProjectModel | null = null;
     private stopWatcher: WatchStopHandle | null = null;
+    private socketService: ProjectWebSocketService;
+
+    constructor() {
+        this.socketService = new ProjectWebSocketService();
+        this.socketService.onProjectUpdated = this.onProjectUpdated.bind(this);
+    }
+
 
     // Fetch a project from the server by ID and set it as the current project
     async fetchProject(id: string): Promise<void> {
@@ -15,6 +23,13 @@ export class ReactiveProjectService {
         } catch (error) {
             this.setProject(null);
             console.error("Failed to fetch project:", error);
+        }
+    }
+
+    private onProjectUpdated(data: any): void {
+        console.log("Project updated via WebSocket", data);
+        if (this.project) {
+            this.project = { ...this.project, ...data };
         }
     }
 
