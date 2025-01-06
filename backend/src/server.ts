@@ -1,30 +1,36 @@
 import express, { Request, Response } from 'express';
 import { CRUDService } from './services/CrudService';
 import { DatabaseService } from './services/DatabaseService';
+import dotenv from "dotenv";
 
-
+dotenv.config();
+const cors = require('cors')
 const app = express();
-const dbService = new DatabaseService("mongodb://localhost:27017", "CuteBanners", "projects");
+const dbService = new DatabaseService(process.env.DB_URL, process.env.DB_NAME, process.env.DB_COLLECTION);
 const crudService = new CRUDService(dbService);
 
 app.use(express.json());
+app.use(cors());
 
 /**
  * Get a project by its ID.
  * Example: GET /projects/67570b25ab29009f4004fcee
  */
 app.get('/projects/:projectId', async (req: Request, res: Response) => {
-  const projectId = req.params.projectId;
-  const project = await crudService.getProject(projectId);
-
-  if (!project) {
-    res.status(404).json({
-      message: `Project with id ${projectId} not found`
-    });
-    return;
+  try {
+    const projectId = req.params.projectId;
+    const project = await crudService.getProject(projectId);
+    if (!project) {
+      res.status(404).json({
+        message: `Project with id ${projectId} not found`
+      });
+      return;
+    }
+    delete (project as any)._id;
+    res.status(200).json(project);
+  } catch (error) {
+    res.status(500);
   }
-
-  res.status(200).json(project);
 });
 
 /**
@@ -33,11 +39,15 @@ app.get('/projects/:projectId', async (req: Request, res: Response) => {
  * Example: { "title": "My new project" }
  */
 app.post('/projects', async (req: Request, res: Response) => {
-  const projectTitle = req.body.title;
-  const project = await crudService.createProject(projectTitle);
-  res.status(201).json({
-    project
-  });
+  try{
+    const projectTitle = req.body.title;
+    const project = await crudService.createProject(projectTitle);
+    res.status(201).json({
+      project
+    });
+  } catch (error) {
+    res.status(500);
+  }
 });
 
 /**
@@ -54,7 +64,7 @@ app.put('/projects/:projectId', async (req, res) => {
     if(updateStatus) res.sendStatus(204);
     else res.sendStatus(404);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(500);
   }
 });
 
