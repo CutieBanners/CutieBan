@@ -20,6 +20,7 @@ export class ReactiveProjectService {
         try {
             const response = await axiosInstance.get<ProjectModel>(`/projects/${id}`);
             this.setProject(response.data);
+            this.socketService.joinProject(id);
         } catch (error) {
             this.setProject(null);
             console.error("Failed to fetch project:", error);
@@ -29,7 +30,12 @@ export class ReactiveProjectService {
     private onProjectUpdated(data: any): void {
         console.log("Project updated via WebSocket", data);
         if (this.project) {
-            this.project = { ...this.project, ...data };
+            try {
+                const response = await axiosInstance.get<ProjectModel>(`/projects/${id}`);
+                this.project = { ...this.project, ...response.data };
+            } catch (error) {
+                console.error("Failed to fetch project:", error);
+            }
         }
     }
 

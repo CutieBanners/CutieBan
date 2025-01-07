@@ -14,6 +14,7 @@ export class ProjectWebSocketService {
         });
 
         this.socket.on("projectUpdated", (data) => {
+            console.log("Project updated via WebSocket", data);
             this.onProjectUpdated(data);
         });
 
@@ -35,6 +36,7 @@ export class ProjectWebSocketService {
     }
 
     joinProject(projectId: string): void {
+        console.log("Joining project:", projectId);
         if (this.projectId !== projectId) {
             if (this.projectId) {
                 this.leaveProject(this.projectId);
@@ -45,6 +47,7 @@ export class ProjectWebSocketService {
     }
 
     private leaveProject(projectId: string): void {
+        console.log("Leaving project:", projectId);
         this.socket.emit("leaveProject", projectId);
         this.projectId = null;
     }
