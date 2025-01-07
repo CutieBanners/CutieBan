@@ -45,7 +45,7 @@ export class DatabaseService {
      * @param document - The document to insert.
      * @returns The inserted document ID.
      */
-    public async insertOne<T>(document: T): Promise<string> {
+    public async insertOne<T>(document: T): Promise<string | null> {
         try {
             const result = await this.collection.insertOne(document);
             if (result.acknowledged) {
@@ -55,7 +55,7 @@ export class DatabaseService {
             }
         } catch (error) {
             console.error(`Failed to insert document:`, error);
-            throw error;
+            return null;
         }
     }
     
@@ -70,7 +70,7 @@ export class DatabaseService {
             return await this.collection.findOne<T>({ _id: new ObjectId(_id) });
         } catch (error) {
             console.error(`Failed to find document:`, error);
-            throw error;
+            return null;
         }
     }
 
@@ -100,7 +100,7 @@ export class DatabaseService {
             return result.modifiedCount || 0;
         } catch (error) {
             console.error(`Failed to update document:`, error);
-            throw error;
+            return 0;
         }
     }
 
@@ -115,7 +115,7 @@ export class DatabaseService {
             return result.deletedCount || 0;
         } catch (error) {
             console.error(`Failed to delete document:`, error);
-            throw error;
+            return 0;
         }
     }
 }
