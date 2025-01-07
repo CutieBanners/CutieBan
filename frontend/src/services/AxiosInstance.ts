@@ -2,7 +2,7 @@ import axios from "axios";
 import * as process from "node:process";
 
 export const axiosInstance = axios.create({
-    baseURL: process.env.SERVER_API_URL,
+    baseURL: import.meta.env.VITE_SERVER_API_URL,
     timeout: 5000,
     headers: {
         "Content-Type": "application/json",

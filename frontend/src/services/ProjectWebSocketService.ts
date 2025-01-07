@@ -7,7 +7,7 @@ export class ProjectWebSocketService {
     public onProjectUpdated: (data: any) => void = () => {};
 
     constructor() {
-        this.socket = io(process.env.SERVER_WS_URL, {
+        this.socket = io(import.meta.env.VITE_SERVER_WS_URL, {
             autoConnect: true,
             reconnection: true,
             reconnectionAttempts: 20,
