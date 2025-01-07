@@ -27,11 +27,11 @@ export class ReactiveProjectService {
         }
     }
 
-    private onProjectUpdated(data: any): void {
+    private async onProjectUpdated(data: any) : Promise<void> {
         console.log("Project updated via WebSocket", data);
         if (this.project) {
             try {
-                const response = await axiosInstance.get<ProjectModel>(`/projects/${id}`);
+                const response = await axiosInstance.get<ProjectModel>(`/projects/${this.project.id}`);
                 this.project = { ...this.project, ...response.data };
             } catch (error) {
                 console.error("Failed to fetch project:", error);
