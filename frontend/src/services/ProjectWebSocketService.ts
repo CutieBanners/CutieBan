@@ -1,4 +1,5 @@
 import { io, Socket } from "socket.io-client";
+import * as process from "node:process";
 
 export class ProjectWebSocketService {
     private socket: Socket;
@@ -6,7 +7,7 @@ export class ProjectWebSocketService {
     public onProjectUpdated: (data: any) => void = () => {};
 
     constructor() {
-        this.socket = io("ws://localhost:3000", {
+        this.socket = io(process.env.SERVER_WS_URL, {
             autoConnect: true,
             reconnection: true,
             reconnectionAttempts: 20,
