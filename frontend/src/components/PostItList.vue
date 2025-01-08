@@ -14,7 +14,7 @@ const { id } = defineProps<{
 const emit = defineEmits<{
   (e: "removeColumn", columnId: number): void;
   (e: "cardClick", cardId: number, columnId: number): void;
-  (e: "addPostIt", columnId: number, order: number): void;
+  (e: "addPostIt", columnId: number): void;
 }>();
 
 const model = computed(() => projectService.currentProject.postItList.find(column => column.id === id)!);

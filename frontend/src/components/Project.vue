@@ -23,8 +23,8 @@ const handleCardClick = (cardId: number, columnId: number) => {
   selectedCard.value = { cardId, columnId };
 };
 
-const addPostIt = (columnId: number, order: number) => {
-  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It",order, "", "yellow", null, [], []));
+const addPostIt = (columnId: number) => {
+  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It", "", "yellow", null, [], []));
 };
 
 const closeModal = () => {

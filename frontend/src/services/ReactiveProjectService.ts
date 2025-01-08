@@ -81,7 +81,6 @@ export class ReactiveProjectService {
             const newColumn = {
                 id: Date.now(),
                 title,
-                order: this.project.postItList.length + 1,
                 postIts: [] as PostItModel[],
             };
             this.project.postItList.push(newColumn);
