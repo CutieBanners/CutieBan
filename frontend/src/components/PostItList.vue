@@ -36,8 +36,8 @@ const drag = ref(false);
 
 <template>
   <div class="">
-    <div class="flex align-items-center justify-content-between cursor-pointer h-3rem">
-      <i class="pi pi-arrows-h drag-handle"></i>
+    <div class="flex align-items-center justify-content-between cursor-pointer h-3rem drag-handle">
+      <i class="pi pi-arrows-h"></i>
       <!-- Editable title -->
       <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" class="max-w-10rem overflow-hidden"/>
       <!-- Button to remove the column -->
