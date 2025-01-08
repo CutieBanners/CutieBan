@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {defineProps, defineEmits, inject, computed} from "vue";
 import EditableInput from "./EditableInput.vue";
-import {CrudService} from "../services/CrudService.ts";
 import Editor from 'primevue/editor';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
@@ -9,6 +8,9 @@ import Popover from 'primevue/popover';
 import { ref } from "vue";
 import {InputText} from "primevue";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import anime from 'animejs/lib/anime.es.js';
+import { onMounted } from "vue";
+
 
 // Props to accept a PostItModel instance
 const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
@@ -32,7 +34,8 @@ const updateDescription = (newDescription: string) => {
   postIt.value.description = newDescription;
 };
 
-const closeModal = () => {
+const closeModal = async () => {
+  await hideModalAnimation()
   emit("close");
 }
 
@@ -70,11 +73,43 @@ const removeAssignee = (index: number) => {
   postIt.assignees.splice(index, 1);
 };
 
+const showModalAnimation = () => {
+  return new Promise((resolve) => {
+    anime({
+      targets: '#modal-post-it',
+      opacity: [0, 1],
+      scale: [0.8, 1],
+      duration: 600,
+      easing: 'easeOutExpo',
+    });
+  });
+};
+
+const hideModalAnimation = () => {
+  return new Promise((resolve) => {
+    anime({
+      targets: '#modal-post-it',
+      opacity: [1, 0],
+      scale: [1, 0.8],
+      duration: 600,
+      easing: 'easeInExpo',
+      complete: () => {
+        document.querySelector('#modal-post-it').style.display = 'none';
+        resolve();
+      },
+    });
+  });
+};
+
+onMounted(() => {
+  showModalAnimation();
+});
+
 </script>
 
 <template>
   <div class="modal-overlay" @click="closeModal">
-    <div class="w-10 p-3 post-it" @click.stop>
+    <div id="modal-post-it" class="w-10 p-3 post-it" @click.stop>
 
       <!-- Editable Title -->
       <div class="flex align-items-center justify-content-between h-3rem w-full">
