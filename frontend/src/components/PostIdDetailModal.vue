@@ -5,7 +5,7 @@ import Editor from 'primevue/editor';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
 import Popover from 'primevue/popover';
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import {InputText} from "primevue";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 
@@ -13,19 +13,23 @@ import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)!.postIts.find(postIt => postIt.id === selectedCard.cardId)!);
+
 const opLabel = ref();
 const opAssignee = ref();
 const newTag = ref('');
 const newAssignee = ref('');
 
+const quillEditor = ref(null); // Reference to the Editor component
+watch(() => postIt.value.description, (newValue) => {
+  const editorInstance = quillEditor.value?.quill;
+  if (editorInstance && editorInstance.root.innerHTML !== newValue) {
+    editorInstance.root.innerHTML = newValue; // Update the editor content
+  }
+});
+
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
-
-// Update the PostItModel's title and description
-const updateTitle = (newTitle: string) => {
-  postIt.value.title = newTitle;
-};
 
 const closeModal = () => {
   emit("close");
@@ -204,6 +208,7 @@ const removeAssignee = (index: number) => {
           editorStyle="height: 320px"
           v-model="postIt.description"
           class="editor_text_sizing"
+          ref="quillEditor"
       />
       <div class="modal-buttons">
         <Button @click="removeCard" label="Remove Card" severity="danger" size="small"></Button>
