@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import {Button, InputText} from 'primevue';
-import {ref} from "vue";
+import {inject, ref} from "vue";
+import {ProjectsService} from "@/services/ProjectsService";
+import {ProjectModel} from "@/models/ProjectModel";
+import { useRouter } from "vue-router";
 
 const formData = ref({ name: '' });
 const showError = ref(false);
 const isShaking = ref(false);
 const hover = ref(false);
+const router = useRouter();
 
-const handleSubmit = () => {
+const projectsService: ProjectsService = inject('projectsService')!;
+
+const handleSubmit = async () => {
   if (!formData.value.name) {
     showError.value = true;
     isShaking.value = true;
@@ -16,6 +22,12 @@ const handleSubmit = () => {
     }, 500);
   } else {
     showError.value = false;
+    try {
+      const project : ProjectModel = await projectsService.createProject(formData.value.name);
+      await router.push({name: "project", params: {id: project.id}});
+    } catch (error) {
+      console.error("Failed to create project:", error);
+    }
   }
 };
 
@@ -105,7 +117,7 @@ function bounce(letter) {
     border-radius: 4px;
     cursor: pointer;
     margin-left: 0.2rem;
-    background: linear-gradient(90deg, #0ab7c6, #270cef, #0ab7c6);
+    background: linear-gradient(90deg, #0ab7c6, #5946e8, #0ab7c6);
     background-size: 300% 100%;
     animation: gradient-loop 4s linear infinite;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
