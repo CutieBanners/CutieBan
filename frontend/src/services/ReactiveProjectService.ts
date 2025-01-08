@@ -18,7 +18,7 @@ export class ReactiveProjectService {
     // Fetch a project from the server by ID and set it as the current project
     async fetchProject(id: string): Promise<void> {
         try {
-            const response = await axiosInstance.get<ProjectModel>(`/projects/${id}`);
+            const response = await this.requestProject(id);
             this.setProject(response.data);
             this.socketService.joinProject(id);
         } catch (error) {
@@ -30,13 +30,19 @@ export class ReactiveProjectService {
     private async onProjectUpdated(data: any) : Promise<void> {
         if (this.project) {
             try {
-                const response = await axiosInstance.get<ProjectModel>(`/projects/${this.project.id}`);
+                const response = await this.requestProject(this.project.id);
+                if(response.data.lastUpdate.getTime() <= this.project.lastUpdate.getTime()) return;
                 Object.assign(this.project, response.data);
                 console.log("Project updated via WebSocket", this.project.postItList);
             } catch (error) {
                 console.error("Failed to fetch project:", error);
             }
         }
+    }
+
+    private async requestProject(id: string): Promise<ProjectModel> {
+        const response : any = await axiosInstance.get<ProjectModel>(`/projects/${id}`);
+        return {...response.data, lastUpdate: new Date(response.data.lastUpdate) };
     }
 
     // Set the current project and start watching it for changes
