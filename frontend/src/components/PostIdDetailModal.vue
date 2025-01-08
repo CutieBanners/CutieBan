@@ -217,7 +217,7 @@ const removeAssignee = (index: number) => {
       />
       <div class="modal-buttons">
         <Button @click="removeCard" label="Remove Card" severity="danger" size="small"></Button>
-        <Button @click="closeModal" label="Save" severity="success" size="small"></Button>
+        <Button @click="closeModal" label="Close" severity="success" size="small"></Button>
       </div>
     </div>
   </div>
