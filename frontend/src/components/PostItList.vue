@@ -49,10 +49,10 @@ const drag = ref(false);
       <draggable v-model="model.postIts" item-key="id" group="postItList" class="h-80" v-bind="dragOptions" @start="drag = true"
                  @end="drag = false">
         <template #item="{ element }">
-          <PostIt :model="element" @cardClick="(cardId) => $emit('cardClick', cardId, id)" />
+          <PostIt :model="element" @cardClick="(cardId) => $emit('cardClick', cardId, id)" class="post-it-hover"/>
         </template>
         <template #footer>
-          <div class="post-it h-3rem opacity-50 text-center" @click="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
+          <div class="post-it h-3rem opacity-50 text-center post-it-hover" @click="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
         </template>
       </draggable>
     </transition-group>
@@ -71,5 +71,10 @@ const drag = ref(false);
 .h-80 {
   height: 80vh;
   overflow: auto;
+}
+
+.post-it-hover:hover {
+  rotate: 3deg;
+  box-shadow: 1px 9px 8px 0px #ababab;
 }
 </style>
