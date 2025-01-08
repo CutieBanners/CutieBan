@@ -79,7 +79,7 @@ export class ReactiveProjectService {
     addColumn(title: string): void {
         if (this.project) {
             const newColumn = {
-                id: Date.now().toString(), // Ensure the ID is a string
+                id: Date.now(),
                 title,
                 order: this.project.postItList.length + 1,
                 postIts: [] as PostItModel[],

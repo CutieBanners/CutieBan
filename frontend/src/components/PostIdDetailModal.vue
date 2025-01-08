@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import {defineProps, defineEmits, inject} from "vue";
-import { PostItModel } from "../models/PostItModel";
+import {defineProps, defineEmits, inject, computed} from "vue";
 import EditableInput from "./EditableInput.vue";
-import {CrudService} from "../services/CrudService.ts"; // Import the EditableInput component
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 
 // Props to accept a PostItModel instance
-const { selectedCard } = defineProps<{ selectedCard: { card: PostItModel, projectId: string, columnId: number } }>();
-const crudService : CrudService = inject('crudService')!;
-const postIt = selectedCard.card;
+const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
+const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
+const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)!.postIts.find(postIt => postIt.id === selectedCard.cardId)!);
 
 const emit = defineEmits<{
   (e: "close"): void;
@@ -15,11 +14,11 @@ const emit = defineEmits<{
 
 // Update the PostItModel's title and description
 const updateTitle = (newTitle: string) => {
-  selectedCard.card.title = newTitle;
+  postIt.value.title = newTitle;
 };
 
 const updateDescription = (newDescription: string) => {
-  selectedCard.card.description = newDescription;
+  postIt.value.description = newDescription;
 };
 
 const closeModal = () => {
@@ -27,7 +26,7 @@ const closeModal = () => {
 }
 
 const removeCard = () => {
-  crudService.deletePostItFromColumn(selectedCard.projectId, selectedCard.columnId, selectedCard.card);
+  projectService.deletePostIt(selectedCard.columnId, selectedCard.cardId);
   closeModal();
 }
 </script>
@@ -54,7 +53,7 @@ const removeCard = () => {
       <ul>
         <li><strong>Assignees:</strong> {{ postIt.assignees.join(', ') }}</li>
         <li><strong>Tags:</strong> {{ postIt.tags.join(', ') }}</li>
-        <li><strong>Due Date:</strong> {{ postIt.endDate.toLocaleDateString() }}</li>
+        <li><strong>Due Date:</strong> {{  postIt.endDate?.toLocaleDateString() ?? "No due date" }}</li>
       </ul>
 
       <div class="modal-buttons">

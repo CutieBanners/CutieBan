@@ -35,7 +35,7 @@ const handleTitleEditFinished = () => {
     <!-- Draggable post-it container -->
     <draggable v-model="model.postIts" item-key="id" group="postItList">
       <template #item="{ element }">
-        <PostIt :model="element" :project-id="projectId" :column-id="id" @cardClick="$emit('cardClick', element, projectId, id)" />
+        <PostIt :model="element" :project-id="projectId" :column-id="id" @cardClick="(cardId, columnId) => $emit('cardClick', cardId, columnId)" />
       </template>
       <template #footer>
         <button @click="$emit('addPostIt', id, model.postIts.length + 1)">Add</button>

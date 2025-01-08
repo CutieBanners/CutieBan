@@ -24,16 +24,7 @@ const handleCardClick = (cardId: number, columnId: number) => {
 };
 
 const addPostIt = (columnId: number, order: number) => {
-  projectService.createPostIt(columnId,{
-    id: Date.now(),
-    title: "New Post-It",
-    order: order,
-    description: "Description",
-    color: "yellow",
-    date: new Date(),
-    assignees: [],
-    tags: [],
-  });
+  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It",order, "", "yellow", null, [], []));
 };
 
 const closeModal = () => {
