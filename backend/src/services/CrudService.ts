@@ -1,6 +1,4 @@
 import { DatabaseService } from './DatabaseService';
-import { PostItListModel} from '../models/PostItListModel';
-import { PostItModel} from '../models/PostItModel';
 import { ProjectModel} from '../models/ProjectModel';
 
 /**
