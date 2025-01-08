@@ -1,6 +1,6 @@
 import { reactive, watch, WatchStopHandle } from "vue";
-import { ProjectModel } from "../models/ProjectModel";
-import { PostItModel } from "../models/PostItModel";
+import { ProjectModel } from "@/models/ProjectModel";
+import { PostItModel } from "@/models/PostItModel";
 import { axiosInstance } from "./AxiosInstance";
 import { ProjectWebSocketService } from "./ProjectWebSocketService";
 
@@ -100,7 +100,7 @@ export class ReactiveProjectService {
     // Add a new PostIt to a specific column
     createPostIt(columnId: number, postIt: PostItModel): void {
         if (this.project) {
-            const column = this.project.postItList.find(col => col.id === columnId);
+            const column : PostItListMode = this.project.postItList.find(col => col.id === columnId);
             if (column) {
                 column.postIts.push(postIt);
             }

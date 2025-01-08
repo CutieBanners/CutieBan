@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-import { PostItModel } from "../models/PostItModel.ts";
+import { PostItModel } from "@/models/PostItModel";
 
 const { model } = defineProps<{
   model: PostItModel

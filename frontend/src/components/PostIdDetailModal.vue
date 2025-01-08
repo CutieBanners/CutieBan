@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {defineProps, defineEmits, inject, computed} from "vue";
 import EditableInput from "./EditableInput.vue";
-import {CrudService} from "../services/CrudService.ts";
 import Editor from 'primevue/editor';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';

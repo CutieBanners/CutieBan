@@ -31,8 +31,8 @@ const loadProject = async (id: string) => {
 
 watch(
     () => route.params.id,
-    (newId, oldId) => {
-      loadProject(newId);
+    (newId, _) => {
+      loadProject(newId.toString());
     },
     { immediate: true }
 );
