@@ -75,11 +75,10 @@ app.put('/projects/:projectId', async (req, res) => {
     const { projectId } = req.params;
     const updatedProjectData = req.body;
     const updateStatus = await crudService.updateProject(projectId, updatedProjectData);
-    if(updateStatus){
-      req.io.notifyProjectChange(projectId);
-      res.sendStatus(204);
-    }
-    else res.sendStatus(404);
+    if(isNaN(updateStatus)) res.sendStatus(404);
+
+    req.io.notifyProjectChange(projectId);
+    res.sendStatus(204);
   } catch (error) {
     res.status(500);
   }

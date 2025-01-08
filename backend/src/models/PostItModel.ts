@@ -1,5 +1,5 @@
 export class PostItModel {
-    public id: number;
+    public id: string;
     public title: string;
     public order : number;
     public description: string;
