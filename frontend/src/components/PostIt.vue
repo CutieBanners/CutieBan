@@ -4,12 +4,12 @@ import { PostItModel } from "../models/PostItModel.ts";
 
 const { model, projectId, columnId } = defineProps<{
   model: PostItModel,
-  projectId : number,
+  projectId : string,
   columnId : number
 }>();
 
 const emit = defineEmits<{
-  (e: "cardClick", card: PostItModel, projectId: string, columnId: string): void;
+  (e: "cardClick", card: PostItModel, projectId: string, columnId: number): void;
 }>();
 
 const handleClick = () => {

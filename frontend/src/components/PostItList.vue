@@ -8,12 +8,12 @@ import {PostItModel} from "../models/PostItModel.ts";
 
 const { model } = defineProps<{
   model: PostItListModel,
-  projectId : number
+  projectId : string
 }>();
 
 const emit = defineEmits<{
-  (e: "removeColumn", columnId: string): void;
-  (e: "cardClick", card: PostItModel, projectId: string, columnId: string): void;
+  (e: "removeColumn", columnId: number): void;
+  (e: "cardClick", card: PostItModel, projectId: string, columnId: number): void;
 }>();
 
 const postItRef = ref(model.postIts);

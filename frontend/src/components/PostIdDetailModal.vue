@@ -5,7 +5,7 @@ import EditableInput from "./EditableInput.vue";
 import {CrudService} from "../services/CrudService.ts"; // Import the EditableInput component
 
 // Props to accept a PostItModel instance
-const { selectedCard } = defineProps<{ selectedCard: { card: PostItModel, projectId: string, columnId: string } }>();
+const { selectedCard } = defineProps<{ selectedCard: { card: PostItModel, projectId: string, columnId: number } }>();
 const crudService : CrudService = inject('crudService')!;
 const postIt = selectedCard.card;
 

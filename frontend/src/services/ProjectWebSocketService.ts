@@ -15,7 +15,6 @@ export class ProjectWebSocketService {
         });
 
         this.socket.on("projectUpdated", (data) => {
-            console.log("Project updated via WebSocket", data);
             this.onProjectUpdated(data);
         });
 
