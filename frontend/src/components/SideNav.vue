@@ -34,6 +34,9 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 </template>
 
 <style scoped>
+Button{
+  position: absolute;
+}
 ul {
   padding-left: 1rem;
 }
