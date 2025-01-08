@@ -59,6 +59,26 @@ const addTag = async () => {
       delay: anime.stagger(100, { start: 0 }),
     });
   }
+  else {
+    document.getElementById("input-tag").style.borderColor = "red";
+
+    anime({
+      targets: '#input-tag',
+      easing: 'linear',
+      duration: 200,
+      translateX: [
+        {
+          value: 10,
+        },
+        {
+          value: -10,
+        },
+        {
+          value: 0,
+        },
+      ],
+    });
+  }
 };
 
 const addAssignee = async () => {
@@ -73,6 +93,26 @@ const addAssignee = async () => {
       easing: "easeOutExpo",
       duration: 40,
       delay: anime.stagger(100, { start: 0 }),
+    });
+  }
+  else {
+    document.getElementById("input-assignee").style.borderColor = "red";
+
+    anime({
+      targets: '#input-assignee',
+      easing: 'linear',
+      duration: 200,
+      translateX: [
+        {
+          value: 10,
+        },
+        {
+          value: -10,
+        },
+        {
+          value: 0,
+        },
+      ],
     });
   }
 };
@@ -184,7 +224,7 @@ onMounted(() => {
               <div>
                 <span class="font-medium block mb-2">Assignees</span>
                 <InputGroup>
-                  <InputText v-model="newAssignee" placeholder="John Doe" class="mr-1" />
+                  <InputText v-model="newAssignee" placeholder="John Doe" class="mr-1" id="input-assignee"/>
                   <Button
                       label="Add"
                       severity="contrast"
@@ -240,7 +280,7 @@ onMounted(() => {
               <div>
                 <span class="font-medium block mb-2">Label</span>
                 <InputGroup>
-                  <InputText v-model="newTag" placeholder="Tag name" class="mr-1" />
+                  <InputText v-model="newTag" placeholder="Tag name" class="mr-1" id="input-tag"/>
                   <Button
                       label="Add"
                       severity="contrast"
