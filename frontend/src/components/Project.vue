@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { ProjectModel } from "../models/ProjectModel.ts";
+import { ProjectModel } from "@/models/ProjectModel.ts";
 import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
 import { ref } from "vue";
-import { PostItModel } from "../models/PostItModel.ts"; // Import the PostItModel
+import { PostItModel } from "@/models/PostItModel.ts";
+import Horizontal_rule from "@/components/HorizontalRule.vue";
+import {Button} from "primevue";
 
 const { model } = defineProps<{ model: ProjectModel }>();
 const postItListRef = ref(model.postItList);
+const scrollContainer = ref(null); // Reference to the scroll container
+const isScrolling = ref(false); // Flag to disable draggable during scrolling
+const isDragging = ref(false); // Flag to track dragging
+const startX = ref(0); // Initial mouse position
+const scrollLeft = ref(0); // Initial scroll position
 
 const selectedCard = ref<{ card: PostItModel, projectId: number, columnId: number } | null>(null);
 
@@ -40,20 +47,44 @@ const removeCard = (id: number) => {
     selectedCard.value = null; // Reset the selected card
   }
 };
+const dragOptions = ref({
+  animation: 200,
+  disabled: false,
+  ghostClass: 'ghost',
+});
+
+const drag = ref(false);
+
 </script>
 
 <template>
-  <div class="project">
-    <h1>{{ model.title }}</h1>
+  <div class="">
+    <div class="flex justify-content-center">
+      <h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ model.title }}
+        <Horizontal_rule></Horizontal_rule>
+      </h1>
+    </div>
 
-    <draggable v-model="postItListRef" item-key="id" group="project" class="columns">
-      <template #item="{ element }">
-        <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" />
-      </template>
-      <template #footer>
-        <button @click="addColumn">Add Column</button>
-      </template>
-    </draggable>
+    <div class="">
+      <transition-group>
+        <draggable
+            v-model="postItListRef"
+            item-key="id" group="project"
+            class="project"
+            v-bind="dragOptions"
+            @start="drag = true"
+            :handle="'.drag-handle'"
+            @end="drag = false"
+        >
+          <template #item="{ element }">
+            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="h-full column-width vertical_line"/>
+          </template>
+          <template #footer>
+            <Button @click="addColumn" class="h-fit p-2 column-width border-2">Add Column</Button>
+          </template>
+        </draggable>
+      </transition-group>
+    </div>
 
     <!-- Modal Component -->
     <Modal
@@ -68,15 +99,24 @@ const removeCard = (id: number) => {
 <style scoped>
 .project {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
 }
 
-.columns {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  padding: 10px;
-  overflow-x: auto;
+.vertical_line {
+  border-right: 2px dashed;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+.column-width {
+  flex: 0 0 250px;
+}
+
+@media only screen and (max-width: 600px) {
+  .column-width {
+    flex: 0 0 150px;
+  }
 }
 </style>

@@ -1,15 +1,10 @@
 <script setup lang="ts">
-
-import Project from "./components/Project.vue";
-import {inject} from "vue";
-import {CrudService} from "./services/CrudService.ts";
-
-const crudService : CrudService = inject('crudService')!;
-const project = crudService.getProject(0)!;
+import SideNav from "@/components/SideNav.vue";
 </script>
 
 <template>
-  <Project :model="project"></Project>
+  <SideNav></SideNav>
+  <router-view></router-view>
 </template>
 
 <style scoped>
