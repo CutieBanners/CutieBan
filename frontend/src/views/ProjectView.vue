@@ -12,6 +12,7 @@ const projectService: ReactiveProjectService = inject('reactiveProjectService')!
 const route = useRoute();
 
 // Reactive reference for project
+const fetching = ref(true);
 const hasProject = ref(false);
 
 // Function to load the project
@@ -22,6 +23,7 @@ const loadProject = async (id: string) => {
     if (project) {
       hasProject.value = true;
       recentProjects.addRecentProject(project);
+      fetching.value = false;
     }
   } catch (e) {
     hasProject.value = false;
@@ -39,8 +41,17 @@ watch(
 </script>
 
 <template>
-  <Project v-if="hasProject"></Project>
-  <NotFound v-else></NotFound>
+  <div v-if="!fetching">
+    <Project v-if="hasProject"></Project>
+    <NotFound v-else></NotFound>
+  </div>
+  <div v-else>
+    <div class="flex justify-content-center align-items-center height_90">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
