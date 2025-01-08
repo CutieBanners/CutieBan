@@ -73,6 +73,10 @@ const drag = ref(false);
   overflow: auto;
 }
 
+.post-it-hover {
+  transition: rotate 0.3s ease, box-shadow 0.3s ease;
+}
+
 .post-it-hover:hover {
   rotate: 3deg;
   box-shadow: 1px 9px 8px 0px #ababab;
