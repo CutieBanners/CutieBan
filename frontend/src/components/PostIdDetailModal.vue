@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {defineProps, defineEmits, inject} from "vue";
-import { PostItModel } from "../models/PostItModel";
+import {defineProps, defineEmits, inject, computed} from "vue";
 import EditableInput from "./EditableInput.vue";
 import {CrudService} from "../services/CrudService.ts";
 import Editor from 'primevue/editor';
@@ -9,11 +8,12 @@ import Button from 'primevue/button';
 import Popover from 'primevue/popover';
 import { ref } from "vue";
 import {InputText} from "primevue";
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 
 // Props to accept a PostItModel instance
-const { selectedCard } = defineProps<{ selectedCard: { card: PostItModel, projectId: number, columnId: number } }>();
-const crudService : CrudService = inject('crudService')!;
-const postIt = selectedCard.card;
+const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
+const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
+const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)!.postIts.find(postIt => postIt.id === selectedCard.cardId)!);
 const opLabel = ref();
 const opAssignee = ref();
 const newTag = ref('');
@@ -25,11 +25,11 @@ const emit = defineEmits<{
 
 // Update the PostItModel's title and description
 const updateTitle = (newTitle: string) => {
-  selectedCard.card.title = newTitle;
+  postIt.value.title = newTitle;
 };
 
 const updateDescription = (newDescription: string) => {
-  selectedCard.card.description = newDescription;
+  postIt.value.description = newDescription;
 };
 
 const closeModal = () => {
@@ -37,7 +37,7 @@ const closeModal = () => {
 }
 
 const removeCard = () => {
-  crudService.deletePostItFromColumn(selectedCard.projectId, selectedCard.columnId, selectedCard.card);
+  projectService.deletePostIt(selectedCard.columnId, selectedCard.cardId);
   closeModal();
 }
 

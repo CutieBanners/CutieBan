@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {Button, Drawer, Menu} from "primevue";
-import {ref} from "vue";
+import {inject, ref} from "vue";
 import {ProjectLinkModel} from "@/models/ProjectLinkModel";
+import {RecentProjectsService} from "@/services/RecentProjectsService";
 const visible : boolean = ref(false)
 
-const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new ProjectLinkModel("2", "project2")]
+const recentProjects: RecentProjectsService = inject('recentProjectsService')!;
+const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 
 </script>
 
@@ -16,8 +18,8 @@ const projects :ProjectLinkModel[] = [new ProjectLinkModel("1", "project1"), new
       <ul>
         <div v-for="project in projects">
           <RouterLink
-              v-if="project.id"
               :to="{ name: 'project', params: { id: project.id } }"
+              @click="visible = false"
           >
             <li>
               <i class="pi pi-angle-right"></i>

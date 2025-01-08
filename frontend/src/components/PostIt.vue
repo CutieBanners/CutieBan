@@ -2,18 +2,16 @@
 import { defineProps, defineEmits } from "vue";
 import { PostItModel } from "../models/PostItModel.ts";
 
-const { model, projectId, columnId } = defineProps<{
-  model: PostItModel,
-  projectId : number,
-  columnId : number
+const { model } = defineProps<{
+  model: PostItModel
 }>();
 
 const emit = defineEmits<{
-  (e: "cardClick", card: PostItModel, projectId: number, columnId: number): void;
+  (e: "cardClick", cardId: number): void;
 }>();
 
 const handleClick = () => {
-  emit("cardClick", model, projectId, columnId);
+  emit("cardClick", model.id);
 };
 
 const handleDrag = (event) => {

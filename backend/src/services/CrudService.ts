@@ -49,7 +49,7 @@ export class CRUDService {
      */
     async updateProject(projectId: string, project: ProjectModel ): Promise<number> {
         const existingProject = await this.dbService.findOne<ProjectModel>(projectId);
-        if (!existingProject) return null;
+        if (!existingProject) return NaN;
 
         Object.assign(existingProject, project);
 

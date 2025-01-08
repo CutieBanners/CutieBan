@@ -5,7 +5,8 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import 'primeicons/primeicons.css';
 import router from '@/router'
-import {CrudService} from "./services/CrudService.ts";
+import {RecentProjectsService} from "@/services/RecentProjectsService";
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 
 const app = createApp(App);
 app.use(PrimeVue, {
@@ -15,5 +16,6 @@ app.use(PrimeVue, {
 });
 
 app.use(router)
-app.provide('crudService', new CrudService());
+app.provide('recentProjectsService', new RecentProjectsService());
+app.provide('reactiveProjectService', new ReactiveProjectService());
 app.mount("#app");

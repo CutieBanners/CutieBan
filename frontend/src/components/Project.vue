@@ -1,49 +1,45 @@
 <script setup lang="ts">
-import { ProjectModel } from "@/models/ProjectModel.ts";
 import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
-import { ref } from "vue";
-import { PostItModel } from "@/models/PostItModel.ts";
 import Horizontal_rule from "@/components/HorizontalRule.vue";
 import {Button} from "primevue";
+import {inject, ref} from "vue";
+import { PostItModel } from "@/models/PostItModel";
+import {ReactiveProjectService} from "@/services/ReactiveProjectService"; // Import the PostItModel
 
-const { model } = defineProps<{ model: ProjectModel }>();
-const postItListRef = ref(model.postItList);
+const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 const scrollContainer = ref(null); // Reference to the scroll container
 const isScrolling = ref(false); // Flag to disable draggable during scrolling
 const isDragging = ref(false); // Flag to track dragging
 const startX = ref(0); // Initial mouse position
 const scrollLeft = ref(0); // Initial scroll position
 
-const selectedCard = ref<{ card: PostItModel, projectId: number, columnId: number } | null>(null);
+const selectedCard = ref<{ cardId: number, columnId: number } | null>(null);
 
 const addColumn = () => {
-  postItListRef.value.push({
-    id: Date.now(),
-    title: "New Column",
-    postIts: [],
-  });
+  projectService.addColumn("New Column");
 };
 
 const removeColumn = (columnId: number) => {
-  postItListRef.value = postItListRef.value.filter((column) => column.id !== columnId);
+  projectService.removeColumn(columnId);
 };
 
-const handleCardClick = (card: PostItModel, projectId: number, columnId: number) => {
-  selectedCard.value = { card, projectId, columnId };
+const handleCardClick = (cardId: number, columnId: number) => {
+  selectedCard.value = { cardId, columnId };
+};
+
+const addPostIt = (columnId: number) => {
+  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It", "", "yellow", null, [], []));
 };
 
 const closeModal = () => {
   selectedCard.value = null; // Reset the selected card
 };
 
-// Handle removing a card
 const removeCard = (id: number) => {
   if (selectedCard.value) {
-    model.postItList = model.postItList.filter((column) =>
-        column.postIts.every(postIt => postIt.id !== id) // Remove the card with matching id
-    );
+    projectService.deletePostIt(selectedCard.value.columnId, id);
     selectedCard.value = null; // Reset the selected card
   }
 };
@@ -60,7 +56,7 @@ const drag = ref(false);
 <template>
   <div class="">
     <div class="flex justify-content-center">
-      <h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ model.title }}
+      <h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
         <Horizontal_rule></Horizontal_rule>
       </h1>
     </div>
@@ -68,8 +64,9 @@ const drag = ref(false);
     <div class="">
       <transition-group>
         <draggable
-            v-model="postItListRef"
-            item-key="id" group="project"
+            v-model="projectService.currentProject.postItList"
+            item-key="id"
+            group="project"
             class="project"
             v-bind="dragOptions"
             @start="drag = true"
@@ -77,7 +74,7 @@ const drag = ref(false);
             @end="drag = false"
         >
           <template #item="{ element }">
-            <CardList :model="element" :project-id="model.id" @removeColumn="removeColumn" @cardClick="handleCardClick" class="h-full column-width vertical_line"/>
+            <CardList :id="element.id" @removeColumn="removeColumn" @cardClick="handleCardClick" @addPostIt="addPostIt" class="h-full column-width vertical_line"/>
           </template>
           <template #footer>
             <Button @click="addColumn" class="h-fit p-2 column-width border-2">Add Column</Button>
