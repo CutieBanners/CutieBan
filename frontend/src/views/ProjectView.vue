@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 import {RecentProjectsService} from "@/services/RecentProjectsService";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 import {ProjectModel} from "@/models/ProjectModel";
+import NotFound from "@/components/NotFound.vue";
 
 const recentProjects: RecentProjectsService = inject('recentProjectsService')!;
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
@@ -39,6 +40,7 @@ watch(
 
 <template>
   <Project v-if="hasProject"></Project>
+  <NotFound v-else></NotFound>
 </template>
 
 <style scoped>
