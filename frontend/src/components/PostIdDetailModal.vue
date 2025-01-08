@@ -43,14 +43,14 @@ const removeCard = () => {
 
 const addTag = () => {
   if (newTag.value.trim()) {
-    postIt.tags.push(newTag.value.trim());
+    postIt.value.tags.push(newTag.value.trim());
     newTag.value = '';
   }
 };
 
 const addAssignee = () => {
   if (newAssignee.value.trim()) {
-    postIt.assignees.push(newAssignee.value.trim());
+    postIt.value.assignees.push(newAssignee.value.trim());
     newAssignee.value = '';
   }
 };
@@ -63,11 +63,11 @@ const toggleAssignee = (event) => {
 }
 
 const removeTag = (index: number) => {
-  postIt.tags.splice(index, 1);
+  postIt.value.tags.splice(index, 1);
 };
 
 const removeAssignee = (index: number) => {
-  postIt.assignees.splice(index, 1);
+  postIt.value.assignees.splice(index, 1);
 };
 
 </script>
