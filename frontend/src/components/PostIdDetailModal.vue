@@ -12,7 +12,7 @@ import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 // Props to accept a PostItModel instance
 const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
-const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)!.postIts.find(postIt => postIt.id === selectedCard.cardId)!);
+const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)?.postIts.find(postIt => postIt.id === selectedCard.cardId));
 
 const opLabel = ref();
 const opAssignee = ref();
@@ -20,6 +20,11 @@ const newTag = ref('');
 const newAssignee = ref('');
 
 const quillEditor = ref(null); // Reference to the Editor component
+
+watch(() => postIt.value, (newValue) => {
+  if (!newValue) closeModal();
+});
+
 watch(() => postIt.value.description, (newValue) => {
   const editorInstance = quillEditor.value?.quill;
   if (editorInstance && editorInstance.root.innerHTML !== newValue) {
