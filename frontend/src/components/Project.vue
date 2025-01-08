@@ -6,7 +6,8 @@ import Horizontal_rule from "@/components/HorizontalRule.vue";
 import {Button} from "primevue";
 import {inject, ref} from "vue";
 import { PostItModel } from "@/models/PostItModel";
-import {ReactiveProjectService} from "@/services/ReactiveProjectService"; // Import the PostItModel
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import EditableInput from "@/components/EditableInput.vue"; // Import the PostItModel
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 const scrollContainer = ref(null); // Reference to the scroll container
@@ -56,9 +57,10 @@ const drag = ref(false);
 <template>
   <div class="">
     <div class="flex justify-content-center">
-      <h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
+      <EditableInput v-model="projectService.currentProject.title" class="chewy-regular xl:text-6xl text-3xl m-0 overflow-hidden"/>
+      <!--<h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
         <Horizontal_rule></Horizontal_rule>
-      </h1>
+      </h1>-->
     </div>
 
     <div class="">
