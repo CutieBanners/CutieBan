@@ -44,17 +44,36 @@ const removeCard = () => {
   closeModal();
 }
 
-const addTag = () => {
+const addTag = async () => {
   if (newTag.value.trim()) {
-    postIt.tags.push(newTag.value.trim());
+    await postIt.tags.push(newTag.value.trim());
     newTag.value = '';
+
+
+    anime({
+      targets: '#tag',
+      translateX: [-50, 0],
+      opacity: [0, 1],
+      easing: "easeOutExpo",
+      duration: 40,
+      delay: anime.stagger(100, { start: 0 }),
+    });
   }
 };
 
-const addAssignee = () => {
+const addAssignee = async () => {
   if (newAssignee.value.trim()) {
-    postIt.assignees.push(newAssignee.value.trim());
+    await postIt.assignees.push(newAssignee.value.trim());
     newAssignee.value = '';
+
+    anime({
+      targets: '#assignees',
+      translateX: [-50, 0],
+      opacity: [0, 1],
+      easing: "easeOutExpo",
+      duration: 40,
+      delay: anime.stagger(100, { start: 0 }),
+    });
   }
 };
 
@@ -122,7 +141,7 @@ onMounted(() => {
         <i class="pi pi-times cursor-pointer" @click="closeModal"></i>
       </div>
 
-      <div class="flex gap-7 w-full">
+      <div class="flex gap-3 w-full">
         <div>
           <div>
             <strong>Assignees:</strong>
@@ -138,8 +157,9 @@ onMounted(() => {
                   severity="contrast"
                   variant="outlined"
                   size="small"
-                  class="text-sm"
+                  class="text-sm max-w-5rem overflow-x-auto"
                   @click="removeAssignee(index)"
+                  id="assignees"
               >
                 {{assignee}}
               </Button>
@@ -193,8 +213,9 @@ onMounted(() => {
                   severity="contrast"
                   variant="outlined"
                   size="small"
-                  class="text-sm"
+                  class="text-sm max-w-5rem overflow-x-auto"
                   @click="removeTag(index)"
+                  id="tag"
               >
                 {{ tag }}
               </Button>
