@@ -9,7 +9,7 @@ import {ReactiveProjectService} from "@/services/ReactiveProjectService"; // Imp
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 
-const selectedCard = ref<{ card: PostItModel, projectId: string, columnId: number } | null>(null);
+const selectedCard = ref<{ cardId: number, columnId: number } | null>(null);
 
 const addColumn = () => {
   projectService.addColumn("New Column");
@@ -19,8 +19,21 @@ const removeColumn = (columnId: number) => {
   projectService.removeColumn(columnId);
 };
 
-const handleCardClick = (card: PostItModel, projectId: string, columnId: number) => {
-  selectedCard.value = { card, projectId, columnId };
+const handleCardClick = (cardId: number, columnId: number) => {
+  selectedCard.value = { cardId, columnId };
+};
+
+const addPostIt = (columnId: number, order: number) => {
+  projectService.createPostIt(columnId,{
+    id: Date.now(),
+    title: "New Post-It",
+    order: order,
+    description: "Description",
+    color: "yellow",
+    date: new Date(),
+    assignees: [],
+    tags: [],
+  });
 };
 
 const closeModal = () => {
@@ -41,7 +54,7 @@ const removeCard = (id: number) => {
 
     <draggable v-model="projectService.currentProject.postItList" item-key="id" group="project" class="columns">
       <template #item="{ element }">
-        <CardList :model="element" :project-id="projectService.currentProject.id" @removeColumn="removeColumn" @cardClick="handleCardClick" />
+        <CardList :id="element.id" @removeColumn="removeColumn" @cardClick="handleCardClick" @addPostIt="addPostIt" />
       </template>
       <template #footer>
         <button @click="addColumn">Add Column</button>

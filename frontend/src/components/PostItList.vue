@@ -1,40 +1,23 @@
 <script setup lang="ts">
-import { PostItListModel } from "../models/PostItListModel.ts";
-import { ref, watch } from "vue";
+import {computed, inject, ref, watch} from "vue";
 import PostIt from "./PostIt.vue";
 import Draggable from "vuedraggable";
 import EditableInput from "./EditableInput.vue";
-import {PostItModel} from "../models/PostItModel.ts";
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 
-const { model } = defineProps<{
-  model: PostItListModel,
-  projectId : string
+const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
+
+const { id } = defineProps<{
+  id: number
 }>();
 
 const emit = defineEmits<{
   (e: "removeColumn", columnId: number): void;
-  (e: "cardClick", card: PostItModel, projectId: string, columnId: number): void;
+  (e: "cardClick", cardId: number, columnId: number): void;
+  (e: "addPostIt", columnId: number, order: number): void;
 }>();
 
-const postItRef = ref(model.postIts);
-
-// Watch for changes to `postItRef` and sync them back to `model.postIts`
-watch(postItRef, (newItems) => {
-  model.postIts = [...newItems];
-}, { deep: true });
-
-const addPostIt = () => {
-  postItRef.value.push({
-    id: Date.now(), // Unique ID
-    title: "New Post-It",
-    order: postItRef.value.length + 1,
-    description: "Description",
-    color: "yellow",
-    date: new Date(),
-    assignees: ["Alice", "Bob"],
-    tags: ["tag1", "tag2"],
-  });
-};
+const model = computed(() => projectService.currentProject.postItList.find(column => column.id === id)!);
 
 const handleTitleEditFinished = () => {
   console.log("Title editing finished. New title:", model.title);
@@ -47,15 +30,15 @@ const handleTitleEditFinished = () => {
     <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" />
 
     <!-- Button to remove the column -->
-    <button @click="$emit('removeColumn', model.id)" class="remove-button">Remove Column</button>
+    <button @click="$emit('removeColumn', id)" class="remove-button">Remove Column</button>
 
     <!-- Draggable post-it container -->
-    <draggable v-model="postItRef" item-key="id" group="postItList">
+    <draggable v-model="model.postIts" item-key="id" group="postItList">
       <template #item="{ element }">
-        <PostIt :model="element" :project-id="projectId" :column-id="model.id" @cardClick="$emit('cardClick', element, projectId, model.id)" />
+        <PostIt :model="element" :project-id="projectId" :column-id="id" @cardClick="$emit('cardClick', element, projectId, id)" />
       </template>
       <template #footer>
-        <button @click="addPostIt">Add</button>
+        <button @click="$emit('addPostIt', id, model.postIts.length + 1)">Add</button>
       </template>
     </draggable>
   </div>
