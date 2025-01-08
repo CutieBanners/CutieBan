@@ -13,6 +13,7 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 <template>
   <div class="card flex justify-center">
     <Drawer v-model:visible="visible" header="CutieBan">
+      <h3 ><RouterLink to="/"><i class="pi pi-home"></i> Home</RouterLink></h3>
       <h3><i class="pi pi-bookmark-fill"></i> Saved</h3>
       <ul>
         <div v-for="project in projects">
