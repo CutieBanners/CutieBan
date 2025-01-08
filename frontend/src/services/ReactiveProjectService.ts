@@ -5,15 +5,15 @@ import { axiosInstance } from "./AxiosInstance";
 import { ProjectWebSocketService } from "./ProjectWebSocketService";
 
 export class ReactiveProjectService {
-    private project: ProjectModel | null = null;
+    private project: reactive<ProjectModel> | null = null;
     private stopWatcher: WatchStopHandle | null = null;
     private socketService: ProjectWebSocketService;
+    private lastProjectPushContent: string | null = null;
 
     constructor() {
         this.socketService = new ProjectWebSocketService();
         this.socketService.onProjectUpdated = this.onProjectUpdated.bind(this);
     }
-
 
     // Fetch a project from the server by ID and set it as the current project
     async fetchProject(id: string): Promise<void> {
@@ -28,11 +28,11 @@ export class ReactiveProjectService {
     }
 
     private async onProjectUpdated(data: any) : Promise<void> {
-        console.log("Project updated via WebSocket", data);
         if (this.project) {
             try {
                 const response = await axiosInstance.get<ProjectModel>(`/projects/${this.project.id}`);
-                this.project = { ...this.project, ...response.data };
+                Object.assign(this.project, response.data);
+                console.log("Project updated via WebSocket", this.project.postItList);
             } catch (error) {
                 console.error("Failed to fetch project:", error);
             }
@@ -57,7 +57,11 @@ export class ReactiveProjectService {
         this.stopWatcher = watch(
             () => this.project,
             async () => {
-                console.log("Detected local changes, syncing...");
+                const projectString = JSON.stringify(this.project);
+                const needSync = this.lastProjectPushContent !== projectString;
+                console.log("Detected local changes, need syncing ?", needSync);
+                if(!needSync) return;
+                this.lastProjectPushContent = projectString;
                 await this.syncProject();
             },
             { deep: true }
@@ -85,7 +89,7 @@ export class ReactiveProjectService {
     }
 
     // Remove a column from the project
-    removeColumn(columnId: string): void {
+    removeColumn(columnId: number): void {
         if (this.project) {
             const index = this.project.postItList.findIndex(column => column.id === columnId);
             if (index !== -1) {
@@ -95,7 +99,7 @@ export class ReactiveProjectService {
     }
 
     // Add a new PostIt to a specific column
-    createPostIt(columnId: string, postIt: PostItModel): void {
+    createPostIt(columnId: number, postIt: PostItModel): void {
         if (this.project) {
             const column = this.project.postItList.find(col => col.id === columnId);
             if (column) {
@@ -105,7 +109,7 @@ export class ReactiveProjectService {
     }
 
     // Update an existing PostIt in a specific column
-    updatePostIt(columnId: string, postItId: string, updatedPostIt: PostItModel): void {
+    updatePostIt(columnId: number, postItId: number, updatedPostIt: PostItModel): void {
         if (this.project) {
             const column = this.project.postItList.find(col => col.id === columnId);
             if (column) {
@@ -118,7 +122,7 @@ export class ReactiveProjectService {
     }
 
     // Delete a PostIt from a specific column
-    deletePostIt(columnId: string, postItId: string): void {
+    deletePostIt(columnId: number, postItId: number): void {
         if (this.project) {
             const column = this.project.postItList.find(col => col.id === columnId);
             if (column) {
@@ -142,34 +146,8 @@ export class ReactiveProjectService {
         }
     }
 
-    // Start watching for changes in the project
-    private startWatching(): void {
-        if (this.project) {
-            if (this.stopWatcher) {
-                this.stopWatcher();
-            }
-
-            this.stopWatcher = watch(
-                () => this.project,
-                async () => {
-                    console.log(`Detected local changes in project ${this.project.id}, syncing...`);
-                    await this.syncProject();
-                },
-                { deep: true }
-            );
-        }
-    }
-
-    // Stop watching changes (cleanup)
-    stopWatching(): void {
-        if (this.stopWatcher) {
-            this.stopWatcher();
-            this.stopWatcher = null;
-        }
-    }
-
     // Get the reactive project
-    get currentProject(): ProjectModel | null {
+    get currentProject(): reactive<ProjectModel> | null {
         return this.project;
     }
 }

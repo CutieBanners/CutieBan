@@ -11,14 +11,13 @@ const projectService: ReactiveProjectService = inject('reactiveProjectService')!
 const route = useRoute();
 
 // Reactive reference for project
-let project : ProjectModel | null = null;
 const hasProject = ref(false);
 
 // Function to load the project
 const loadProject = async (id: string) => {
   try {
     await projectService.fetchProject(id);
-    project = projectService.currentProject;
+    const project = projectService.currentProject;
     if (project) {
       hasProject.value = true;
       recentProjects.addRecentProject(project);
@@ -39,7 +38,7 @@ watch(
 </script>
 
 <template>
-  <Project :model="project" v-if="hasProject"></Project>
+  <Project v-if="hasProject"></Project>
 </template>
 
 <style scoped>
