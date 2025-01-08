@@ -27,10 +27,6 @@ const updateTitle = (newTitle: string) => {
   postIt.value.title = newTitle;
 };
 
-const updateDescription = (newDescription: string) => {
-  postIt.value.description = newDescription;
-};
-
 const closeModal = () => {
   emit("close");
 }
@@ -207,7 +203,6 @@ const removeAssignee = (index: number) => {
       <Editor
           editorStyle="height: 320px"
           v-model="postIt.description"
-          @update:modelValue="updateDescription"
           class="editor_text_sizing"
       />
       <div class="modal-buttons">
