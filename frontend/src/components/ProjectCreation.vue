@@ -41,7 +41,7 @@ function bounce(letter) {
 
 <template>
   <div class="container">
-    <h1 class="chewy-regular text-center bouncing-letters xl:h-10rem flex align-items-center" id="big_title" style="letter-spacing:0.3px;">
+    <h1 class="chewy-regular text-center bouncing-letters xl:h-10rem md:h-7rem  flex align-items-center" id="big_title" style="letter-spacing:0.3px;">
       <span>H</span>
       <span>e</span>
       <span>y</span>
