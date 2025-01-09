@@ -102,7 +102,7 @@ const drag = ref(false);
 }
 
 .vertical_line {
-  border-right: 2px dashed;
+  border-right: 2px dashed rgba(0, 0, 0, 0.25);
   margin-right: 10px;
   padding-right: 10px;
 }
