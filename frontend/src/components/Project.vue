@@ -4,9 +4,10 @@ import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
 import Horizontal_rule from "@/components/HorizontalRule.vue";
 import {Button} from "primevue";
-import {inject, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import { PostItModel } from "@/models/PostItModel";
-import {ReactiveProjectService} from "@/services/ReactiveProjectService"; // Import the PostItModel
+import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import anime from "animejs/lib/anime.es"; // Import the PostItModel
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 const scrollContainer = ref(null); // Reference to the scroll container
@@ -50,6 +51,27 @@ const dragOptions = ref({
 });
 
 const drag = ref(false);
+
+const startAnimation = () => {
+
+  let postIts = document.querySelectorAll(".vertical_line:not(.animated)");
+
+  for (let i = 0; i < postIts.length; i++) {
+    postIts[i].classList.add("animated");
+    postIts[i].style.transform = "translateY(50vh)";
+  }
+
+  anime({
+    targets: postIts,
+    translateY: 0,
+    delay: function(el, i) { return i * 100; },
+    easing: 'easeInOutSine'
+  });
+}
+
+onMounted(() => {
+  startAnimation();
+});
 
 </script>
 
