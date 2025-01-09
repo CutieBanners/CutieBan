@@ -109,20 +109,45 @@ onMounted(() => {
     justify-items: center;
   }
 
+  form{
+    display: flex;
+    justify-content: center;
+  }
 
+  .p-inputtext {
+    font-size: 2rem;
+    max-width: 50%;
+  }
+
+  button {
+    font-size: 2rem;
+  }
+
+
+  @media only screen and (max-width: 600px) {
+
+    .p-inputtext {
+      font-size: 7vw;
+    }
+
+    button {
+      font-size: 7vw;
+    }
+  }
   .animated-gradient-button {
     position: relative;
     display: inline-block;
-    padding: 9px 20px;
-    font-size: 16px;
+    padding: 9px 25px;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin-left: 0.2rem;
-    background: linear-gradient(90deg, #0ab7c6, #270cef, #0ab7c6);
+    background: linear-gradient(90deg, #5763ff, #5496ff, #5763ff, #5496ff);
     background-size: 300% 100%;
     animation: gradient-loop 4s linear infinite;
+    animation-direction: normal;
+    animation-fill-mode: backwards;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: box-shadow 0.3s ease;
   }
@@ -135,13 +160,10 @@ onMounted(() => {
   /* Gradient Animation */
   @keyframes gradient-loop {
     0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
+      background-position: 100% 0%;
     }
     100% {
-      background-position: 0% 50%;
+      background-position: 0% 100%;
     }
   }
 

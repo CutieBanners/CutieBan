@@ -77,11 +77,19 @@ onMounted(() => {
 
 <style scoped>
 .remove-button {
-  color: #ff4d4f;
+  color: #ff7e7f;
 }
 
 .remove-button:hover {
-  color: #d9363e;
+  color: #ff0003;
+}
+
+.pi-arrows-h {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pi-arrows-h:hover {
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .h-80 {
@@ -90,11 +98,10 @@ onMounted(() => {
 }
 
 .post-it-hover {
-  transition: rotate 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .post-it-hover:hover {
-  rotate: 2deg;
-  box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.105);
+  box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.15);
 }
 </style>
