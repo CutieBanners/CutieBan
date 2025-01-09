@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {defineProps, defineEmits, inject, computed} from "vue";
 import EditableInput from "./EditableInput.vue";
-import {CrudService} from "../services/CrudService.ts";
 import Editor from 'primevue/editor';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
@@ -9,6 +8,9 @@ import Popover from 'primevue/popover';
 import { ref } from "vue";
 import {InputText} from "primevue";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import anime from 'animejs/lib/anime.es.js';
+import { onMounted } from "vue";
+
 
 // Props to accept a PostItModel instance
 const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
@@ -18,6 +20,7 @@ const opLabel = ref();
 const opAssignee = ref();
 const newTag = ref('');
 const newAssignee = ref('');
+const animating = ref(false);
 
 const emit = defineEmits<{
   (e: "close"): void;
@@ -32,7 +35,11 @@ const updateDescription = (newDescription: string) => {
   postIt.value.description = newDescription;
 };
 
-const closeModal = () => {
+const closeModal = async () => {
+  if(animating.value) return;
+  animating.value = true;
+  await hideModalAnimation()
+  animating.value = false;
   emit("close");
 }
 
@@ -41,17 +48,76 @@ const removeCard = () => {
   closeModal();
 }
 
-const addTag = () => {
+const addTag = async () => {
   if (newTag.value.trim()) {
-    postIt.tags.push(newTag.value.trim());
+    await postIt.tags.push(newTag.value.trim());
     newTag.value = '';
+
+
+    anime({
+      targets: '#tag',
+      translateX: [-50, 0],
+      opacity: [0, 1],
+      easing: "easeOutExpo",
+      duration: 40,
+      delay: anime.stagger(100, { start: 0 }),
+    });
+  }
+  else {
+    document.getElementById("input-tag").style.borderColor = "red";
+
+    anime({
+      targets: '#input-tag',
+      easing: 'linear',
+      duration: 200,
+      translateX: [
+        {
+          value: 10,
+        },
+        {
+          value: -10,
+        },
+        {
+          value: 0,
+        },
+      ],
+    });
   }
 };
 
-const addAssignee = () => {
+const addAssignee = async () => {
   if (newAssignee.value.trim()) {
-    postIt.assignees.push(newAssignee.value.trim());
+    await postIt.assignees.push(newAssignee.value.trim());
     newAssignee.value = '';
+
+    anime({
+      targets: '#assignees',
+      translateX: [-50, 0],
+      opacity: [0, 1],
+      easing: "easeOutExpo",
+      duration: 40,
+      delay: anime.stagger(100, { start: 0 }),
+    });
+  }
+  else {
+    document.getElementById("input-assignee").style.borderColor = "red";
+
+    anime({
+      targets: '#input-assignee',
+      easing: 'linear',
+      duration: 200,
+      translateX: [
+        {
+          value: 10,
+        },
+        {
+          value: -10,
+        },
+        {
+          value: 0,
+        },
+      ],
+    });
   }
 };
 
@@ -70,15 +136,62 @@ const removeAssignee = (index: number) => {
   postIt.assignees.splice(index, 1);
 };
 
+const showModalAnimation = () => {
+  return new Promise((resolve) => {
+    anime({
+      targets: '.modal-overlay',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      duration: 600,
+      easing: 'easeOutExpo'
+    });
+    anime({
+      targets: '#modal-post-it',
+      opacity: [0, 1],
+      scale: [0.8, 1],
+      duration: 600,
+      easing: 'easeOutExpo',
+      complete: () => {
+        resolve();
+      },
+    });
+  });
+};
+
+const hideModalAnimation = () => {
+  return new Promise((resolve) => {
+    anime({
+      targets: '.modal-overlay',
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      duration: 250,
+      easing: 'easeOutExpo'
+    });
+    anime({
+      targets: '#modal-post-it',
+      opacity: [1, 0],
+      scale: [1, 0.8],
+      duration: 250,
+      easing: 'easeOutExpo',
+      complete: () => {
+        document.querySelector('#modal-post-it').style.display = 'none';
+        resolve();
+      },
+    });
+  });
+};
+
+onMounted(() => {
+  showModalAnimation();
+});
+
 </script>
 
 <template>
   <div class="modal-overlay" @click="closeModal">
-    <div class="w-10 p-3 post-it" @click.stop>
+    <div id="modal-post-it" class="w-10 p-3 post-it" @click.stop>
 
       <!-- Editable Title -->
       <div class="flex align-items-center justify-content-between h-3rem w-full">
-        <i class="pi pi-pen-to-square"></i>
+        <i class="pi pi-pen-to-square not-important"></i>
         <EditableInput
             v-model="postIt.title"
             @update:modelValue="updateTitle"
@@ -87,7 +200,7 @@ const removeAssignee = (index: number) => {
         <i class="pi pi-times cursor-pointer" @click="closeModal"></i>
       </div>
 
-      <div class="flex gap-7 w-full">
+      <div class="flex gap-3 w-full">
         <div>
           <div>
             <strong>Assignees:</strong>
@@ -103,8 +216,9 @@ const removeAssignee = (index: number) => {
                   severity="contrast"
                   variant="outlined"
                   size="small"
-                  class="text-sm"
+                  class="text-sm max-w-5rem overflow-x-auto"
                   @click="removeAssignee(index)"
+                  id="assignees"
               >
                 {{assignee}}
               </Button>
@@ -129,7 +243,7 @@ const removeAssignee = (index: number) => {
               <div>
                 <span class="font-medium block mb-2">Assignees</span>
                 <InputGroup>
-                  <InputText v-model="newAssignee" placeholder="John Doe" class="mr-1" />
+                  <InputText v-model="newAssignee" placeholder="John Doe" class="mr-1" id="input-assignee"/>
                   <Button
                       label="Add"
                       severity="contrast"
@@ -158,8 +272,9 @@ const removeAssignee = (index: number) => {
                   severity="contrast"
                   variant="outlined"
                   size="small"
-                  class="text-sm"
+                  class="text-sm max-w-5rem overflow-x-auto"
                   @click="removeTag(index)"
+                  id="tag"
               >
                 {{ tag }}
               </Button>
@@ -184,7 +299,7 @@ const removeAssignee = (index: number) => {
               <div>
                 <span class="font-medium block mb-2">Label</span>
                 <InputGroup>
-                  <InputText v-model="newTag" placeholder="Tag name" class="mr-1" />
+                  <InputText v-model="newTag" placeholder="Tag name" class="mr-1" id="input-tag"/>
                   <Button
                       label="Add"
                       severity="contrast"
@@ -226,7 +341,6 @@ const removeAssignee = (index: number) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -245,5 +359,19 @@ const removeAssignee = (index: number) => {
 
 .p-editor * {
   font-size: 1rem;
+}
+
+Button{
+  padding-right: 16px;
+  padding-left: 16px;
+  font-size: 1rem;
+}
+
+.not-important{
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.p-button-label{
+  color: #fff;
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from "vue";
-import { PostItModel } from "../models/PostItModel.ts";
+import { PostItModel } from "@/models/PostItModel.ts";
 
 const { model } = defineProps<{
   model: PostItModel
@@ -32,6 +32,14 @@ const handleDrag = (event) => {
 <style scoped>
 .column-width {
   max-width: 250px;
+}
+
+h2{
+  font-size: 1.2em;
+}
+
+.post-it{
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 600px) {
