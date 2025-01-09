@@ -90,11 +90,11 @@ onMounted(() => {
 }
 
 .post-it-hover {
-  transition: rotate 0.3s ease, box-shadow 0.3s ease;
+  transition: rotate 0.2s ease, box-shadow 0.2s ease;
 }
 
 .post-it-hover:hover {
-  rotate: 3deg;
-  box-shadow: 1px 9px 8px 0px #ababab;
+  rotate: 2deg;
+  box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.105);
 }
 </style>
