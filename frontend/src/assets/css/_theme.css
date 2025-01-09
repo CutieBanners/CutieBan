@@ -47,5 +47,39 @@ body, .paper_background {
 }
 
 .p-inputtext.p-component{
+    background-color: #fff9e1;
+}
+
+button.p-button-danger{
+    background-color: #FFB0B1;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+button.p-button-success{
+    background-color: #B0FFC6;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+
+button.p-button-danger:not(:disabled):hover{
+    background-color: #ff5c5e;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+button.p-button-success:not(:disabled):hover{
+    background-color: #7fffa2;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+div.p-editor .p-editor-toolbar {
+    background-color: #fff9e1;
+}
+
+div.p-editor .p-editor-content .ql-editor {
     background-color: #fffcf2;
+}
+
+button.p-button-outlined.p-button-contrast {
+    background-color: #fff9e1;
+    border-color: rgba(0, 0, 0, 0.2);
 }

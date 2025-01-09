@@ -191,7 +191,7 @@ onMounted(() => {
 
       <!-- Editable Title -->
       <div class="flex align-items-center justify-content-between h-3rem w-full">
-        <i class="pi pi-pen-to-square"></i>
+        <i class="pi pi-pen-to-square not-important"></i>
         <EditableInput
             v-model="postIt.title"
             @update:modelValue="updateTitle"
@@ -359,5 +359,19 @@ onMounted(() => {
 
 .p-editor * {
   font-size: 1rem;
+}
+
+Button{
+  padding-right: 16px;
+  padding-left: 16px;
+  font-size: 1rem;
+}
+
+.not-important{
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.p-button-label{
+  color: #fff;
 }
 </style>
