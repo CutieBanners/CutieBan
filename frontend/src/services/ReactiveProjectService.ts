@@ -5,6 +5,7 @@ import { axiosInstance } from "./AxiosInstance";
 import { ProjectWebSocketService } from "./ProjectWebSocketService";
 
 export class ReactiveProjectService {
+    public projectChangedCallbacks: (() => void)[] = [];
     private project: reactive<ProjectModel> | null = null;
     private stopWatcher: WatchStopHandle | null = null;
     private socketService: ProjectWebSocketService;
@@ -56,10 +57,12 @@ export class ReactiveProjectService {
 
         if(!data) {
             this.project = null;
+            this.projectChangedCallbacks?.forEach(cb => cb());
             return;
         }
 
         this.project = reactive(data);
+        this.projectChangedCallbacks?.forEach(cb => cb());
 
         // Watch the project for changes
         this.stopWatcher = watch(

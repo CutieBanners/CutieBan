@@ -32,22 +32,6 @@ const dragOptions = ref({
 });
 
 const drag = ref(false);
-
-onMounted(() => {
-  // Set the initial state
-  document.querySelectorAll('.post-it').forEach((el) => {
-    el.style.transform = 'translateX(-300px)';
-  });
-
-  // Animate to the final position
-  anime({
-    targets: '.post-it',
-    translateX: 0, // Move to the final position
-    delay: anime.stagger(30), // Increase delay by 100ms for each element
-    duration: 400, // Duration of the animation
-    easing: 'easeOutQuad' // Smooth easing
-  });
-});
 </script>
 
 <template>
