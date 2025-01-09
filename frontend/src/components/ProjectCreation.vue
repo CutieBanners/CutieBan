@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {Button, InputText} from 'primevue';
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import anime from "animejs/lib/anime.es.js";
 
 const formData = ref({ name: '' });
 const showError = ref(false);
@@ -19,55 +20,67 @@ const handleSubmit = () => {
   }
 };
 
-document.querySelectorAll(".bouncing-letters>span")
-    .forEach((element) => {
-      element.addEventListener("mouseover",
-          (e) => bounce(e.target));
+
+onMounted(() => {
+  const textWrapper = document.querySelector('#big_idea');
+  textWrapper.innerHTML = textWrapper.textContent.replace(/(\S|\s)/g, function(match) {
+    return match === ' ' ? '&nbsp;' : `<span class='letter'>${match}</span>`;
+  });
+
+  const dock = textWrapper;
+  const icons = document.querySelectorAll(".letter");
+
+  dock.addEventListener("mousemove", (e) => {
+    const effectRadius = 100; // Radius of magnification effect
+    const maxScale = 2; // Maximum scale
+    const maxPadding = Math.min(window.innerWidth * 0.01, 30); // Max 30px
+
+    icons.forEach((icon) => {
+      const rect = icon.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const distance = Math.sqrt(
+          Math.pow(centerX - e.clientX, 2) + Math.pow(centerY - e.clientY, 2)
+      );
+
+      const scale =
+          distance < effectRadius
+              ? 1 + (maxScale - 1) * (1 - distance / effectRadius)
+              : 1;
+
+      const padding =
+          distance < effectRadius
+              ? maxPadding * (1 - distance / effectRadius)
+              : 0;
+
+      anime({
+        targets: icon,
+        scale: scale,
+        padding: padding + "px",
+        duration: 100,
+        easing: "easeOutQuad",
+      });
     });
+  });
 
-function bounce(letter) {
-  if (!letter.classList.contains("bounce")) {
-    letter.classList.add("bounce");
-    setTimeout(
-        function () {
-          letter.classList.remove("bounce");
-        },
-        1000
-    );
-  }
-}
+  dock.addEventListener("mouseleave", () => {
+    anime({
+      targets: icons,
+      scale: 1,
+      padding: "0px",
+      duration: 100,
+      easing: "easeOutQuad",
+    });
+  });
 
+
+})
 </script>
 
 <template>
   <div class="container">
-    <h1 class="chewy-regular text-center bouncing-letters xl:h-10rem flex align-items-center" id="big_title" style="letter-spacing:0.3px;">
-      <span>H</span>
-      <span>e</span>
-      <span>y</span>
-      <span>,</span>
-      <span>&nbsp;</span>
-      <span>w</span>
-      <span>h</span>
-      <span>a</span>
-      <span>t</span>
-      <span>′</span>
-      <span>s</span>
-      <span>&nbsp;</span>
-      <span>t</span>
-      <span>h</span>
-      <span>e</span>
-      <span>&nbsp;</span>
-      <span>b</span>
-      <span>i</span>
-      <span>g</span>
-      <span>&nbsp;</span>
-      <span>i</span>
-      <span>d</span>
-      <span>e</span>
-      <span>a</span>
-      <span>?</span>
-    </h1>
+    <h1 class="chewy-regular text-center bouncing-letters xl:h-10rem flex align-items-center big_title font-bold" id="big_idea">Hey, what′s the big idea ?</h1>
     <form @submit.prevent="handleSubmit">
       <InputText type="text" v-model="formData.name" placeholder="Lollipop"/>
       <button
@@ -86,8 +99,10 @@ function bounce(letter) {
 </template>
 
 <style scoped>
-  #big_title {
+  .big_title {
+    padding: 20px;
     font-size: 4rem;
+    height: 10rem !important;
   }
 
   .container {
@@ -158,20 +173,8 @@ function bounce(letter) {
   }
 
   @media only screen and (max-width: 600px) {
-    #big_title {
+    .big_title {
       font-size: 2rem;
-    }
-  }
-
-  @media only screen and (min-width: 600px) {
-    .bouncing-letters span {
-      transition: font-size ease-in-out .1s;
-      transform: translateZ(0);
-      will-change: transform;
-    }
-
-    .bouncing-letters span:hover {
-      font-size: 8rem;
     }
   }
 
