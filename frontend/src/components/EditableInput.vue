@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits, nextTick, computed } from "vue";
 import { FloatLabel, InputText } from "primevue";
+import anime from "animejs/lib/anime.es.js";
 
 // Props
 const props = defineProps<{
@@ -31,8 +32,31 @@ const startEditing = async () => {
 };
 
 const finishEditing = () => {
-  isEditing.value = false;
-  emit("finishEditing"); // Emit the finishEditing event
+  if (editableValue.value) {
+    isEditing.value = false;
+    emit("finishEditing"); // Emit the finishEditing event
+  }
+  else {
+
+    document.getElementById("in_label").style.borderColor = "red";
+
+    anime({
+      targets: '#in_label',
+      easing: 'linear',
+      duration: 200,
+      translateX: [
+        {
+          value: 10,
+        },
+        {
+          value: -10,
+        },
+        {
+          value: 0,
+        },
+      ],
+    });
+  }
 };
 
 const handleKeydown = (event: KeyboardEvent) => {
@@ -43,7 +67,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <div>
+  <div class="root-editable">
     <!-- Display Mode -->
     <div v-if="!isEditing" @click="startEditing" class="editable-text text-overflow-ellipsis">
       {{ editableValue }}
@@ -67,6 +91,11 @@ const handleKeydown = (event: KeyboardEvent) => {
 </template>
 
 <style scoped>
+
+.root-editable{
+  width: 100%;
+}
+
 .editable-text {
   width: 100%;
   font-size: 1.5rem;
@@ -82,7 +111,7 @@ const handleKeydown = (event: KeyboardEvent) => {
   padding: 5px;
   font-size: 1.5rem;
   text-align: center;
-  border: 1px solid #ccc;
   border-radius: 5px;
 }
+
 </style>

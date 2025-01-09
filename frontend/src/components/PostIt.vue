@@ -34,6 +34,14 @@ const handleDrag = (event) => {
   max-width: 250px;
 }
 
+h2{
+  font-size: 1.2em;
+}
+
+.post-it{
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 600px) {
   .column-width {
     max-width: 150px;

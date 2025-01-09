@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {computed, inject, ref} from "vue";
+import {computed, inject, onMounted, ref} from "vue";
 import PostIt from "./PostIt.vue";
 import Draggable from "vuedraggable";
 import EditableInput from "./EditableInput.vue";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import anime from 'animejs/lib/anime.es.js';
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 
@@ -32,6 +33,21 @@ const dragOptions = ref({
 
 const drag = ref(false);
 
+onMounted(() => {
+  // Set the initial state
+  document.querySelectorAll('.post-it').forEach((el) => {
+    el.style.transform = 'translateX(-300px)';
+  });
+
+  // Animate to the final position
+  anime({
+    targets: '.post-it',
+    translateX: 0, // Move to the final position
+    delay: anime.stagger(30), // Increase delay by 100ms for each element
+    duration: 400, // Duration of the animation
+    easing: 'easeOutQuad' // Smooth easing
+  });
+});
 </script>
 
 <template>
@@ -49,10 +65,10 @@ const drag = ref(false);
       <draggable v-model="model.postIts" item-key="id" group="postItList" class="h-80" v-bind="dragOptions" @start="drag = true"
                  @end="drag = false">
         <template #item="{ element }">
-          <PostIt :model="element" @cardClick="(cardId) => $emit('cardClick', cardId, id)" />
+          <PostIt :model="element" @cardClick="(cardId) => $emit('cardClick', cardId, id)" class="post-it-hover"/>
         </template>
         <template #footer>
-          <div class="post-it h-3rem opacity-50 text-center" @click="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
+          <div class="post-it h-3rem opacity-50 text-center post-it-hover" @click="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
         </template>
       </draggable>
     </transition-group>
@@ -61,15 +77,31 @@ const drag = ref(false);
 
 <style scoped>
 .remove-button {
-  color: #ff4d4f;
+  color: #ff7e7f;
 }
 
 .remove-button:hover {
-  color: #d9363e;
+  color: #ff0003;
+}
+
+.pi-arrows-h {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.pi-arrows-h:hover {
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .h-80 {
   height: 80vh;
   overflow: auto;
+}
+
+.post-it-hover {
+  transition: box-shadow 0.2s ease;
+}
+
+.post-it-hover:hover {
+  box-shadow: 1px 5px 5px 1px rgba(0, 0, 0, 0.15);
 }
 </style>
