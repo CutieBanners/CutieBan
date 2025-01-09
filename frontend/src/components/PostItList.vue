@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {computed, inject, ref} from "vue";
+import {computed, inject, onMounted, ref} from "vue";
 import PostIt from "./PostIt.vue";
 import Draggable from "vuedraggable";
 import EditableInput from "./EditableInput.vue";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import anime from 'animejs/lib/anime.es.js';
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 
@@ -32,6 +33,21 @@ const dragOptions = ref({
 
 const drag = ref(false);
 
+onMounted(() => {
+  // Set the initial state
+  document.querySelectorAll('.post-it').forEach((el) => {
+    el.style.transform = 'translateX(-300px)';
+  });
+
+  // Animate to the final position
+  anime({
+    targets: '.post-it',
+    translateX: 0, // Move to the final position
+    delay: anime.stagger(30), // Increase delay by 100ms for each element
+    duration: 400, // Duration of the animation
+    easing: 'easeOutQuad' // Smooth easing
+  });
+});
 </script>
 
 <template>
