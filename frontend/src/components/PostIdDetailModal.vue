@@ -20,6 +20,7 @@ const opLabel = ref();
 const opAssignee = ref();
 const newTag = ref('');
 const newAssignee = ref('');
+const animating = ref(false);
 
 const emit = defineEmits<{
   (e: "close"): void;
@@ -35,7 +36,10 @@ const updateDescription = (newDescription: string) => {
 };
 
 const closeModal = async () => {
+  if(animating.value) return;
+  animating.value = true;
   await hideModalAnimation()
+  animating.value = false;
   emit("close");
 }
 
@@ -135,11 +139,20 @@ const removeAssignee = (index: number) => {
 const showModalAnimation = () => {
   return new Promise((resolve) => {
     anime({
+      targets: '.modal-overlay',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      duration: 600,
+      easing: 'easeOutExpo'
+    });
+    anime({
       targets: '#modal-post-it',
       opacity: [0, 1],
       scale: [0.8, 1],
       duration: 600,
       easing: 'easeOutExpo',
+      complete: () => {
+        resolve();
+      },
     });
   });
 };
@@ -147,11 +160,17 @@ const showModalAnimation = () => {
 const hideModalAnimation = () => {
   return new Promise((resolve) => {
     anime({
+      targets: '.modal-overlay',
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      duration: 250,
+      easing: 'easeOutExpo'
+    });
+    anime({
       targets: '#modal-post-it',
       opacity: [1, 0],
       scale: [1, 0.8],
-      duration: 600,
-      easing: 'easeInExpo',
+      duration: 250,
+      easing: 'easeOutExpo',
       complete: () => {
         document.querySelector('#modal-post-it').style.display = 'none';
         resolve();
@@ -322,7 +341,6 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
