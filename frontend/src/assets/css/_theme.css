@@ -21,9 +21,7 @@ a {
 }
 
 body, .paper_background {
-    background: no-repeat url(//s.ytimg.com/yt/imgbin/www-refreshbg-vflC3wnbM.png) 0 0;
-    background-color: #EBEBEB;
-    background-repeat: repeat;
+    background: repeat url(../img/bg.png);
 }
 
 /* scroll bars */
