@@ -20,10 +20,10 @@ const loadProject = async (id: string) => {
   try {
     await projectService.fetchProject(id);
     const project = projectService.currentProject;
+    fetching.value = false;
     if (project) {
       hasProject.value = true;
       recentProjects.addRecentProject(project);
-      fetching.value = false;
     }
   } catch (e) {
     hasProject.value = false;
