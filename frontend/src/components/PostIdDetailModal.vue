@@ -327,6 +327,7 @@ onMounted(() => {
           <div><strong>Color:</strong></div>
           <div class="color-container">
             <div v-for="(color, index) in colors" :key="index" class="color-button" @click="postIt.color = color" :style="{ backgroundColor: color }" :class="{ selected: postIt.color === color }"></div>
+            <input type="color" @input="postIt.color = $event.target.value" :value="postIt.color" class="color-button" :class="{ selected: !colors.includes(postIt.color) }"/>
           </div>
         </div>
       </div>
