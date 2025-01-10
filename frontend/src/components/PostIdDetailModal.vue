@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineProps, defineEmits, inject, computed} from "vue";
+import {defineProps, defineEmits, inject, computed, useTemplateRef} from "vue";
 import EditableInput from "./EditableInput.vue";
 import Editor from 'primevue/editor';
 import DatePicker from 'primevue/datepicker';
@@ -184,6 +184,8 @@ const hideModalAnimation = () => {
   });
 };
 
+const colors = ["#FFEDAF", "#FFB0B1", "#B0B7FF", "#B0FFC6"]
+
 onMounted(() => {
   showModalAnimation();
 });
@@ -321,6 +323,12 @@ onMounted(() => {
           <div><strong>Due Date:</strong></div>
           <DatePicker v-model="postIt.endDate" />
         </div>
+        <div>
+          <div><strong>Color:</strong></div>
+          <div class="color-container">
+            <div v-for="(color, index) in colors" :key="index" class="color-button" @click="postIt.color = color" :style="{ backgroundColor: color }" :class="{ selected: postIt.color === color }"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Editable Description -->
@@ -378,5 +386,23 @@ Button{
 
 .p-button-label{
   color: #fff;
+}
+
+.color-container{
+  display: flex;
+  gap: 5px;
+}
+
+.color-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.color-button.selected {
+  border: 2px solid #000;
 }
 </style>
