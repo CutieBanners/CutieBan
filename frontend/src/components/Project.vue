@@ -31,7 +31,7 @@ const handleCardClick = (cardId: number, columnId: number) => {
 };
 
 const addPostIt = (columnId: number) => {
-  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It", "", "yellow", null, [], []));
+  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It", "", "#ffedaf", null, [], []));
 };
 
 const closeModal = () => {
