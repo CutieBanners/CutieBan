@@ -1,10 +1,11 @@
 import { reactive, watch, WatchStopHandle } from "vue";
-import { ProjectModel } from "../models/ProjectModel";
-import { PostItModel } from "../models/PostItModel";
+import { ProjectModel } from "@/models/ProjectModel";
+import { PostItModel } from "@/models/PostItModel";
 import { axiosInstance } from "./AxiosInstance";
 import { ProjectWebSocketService } from "./ProjectWebSocketService";
 
 export class ReactiveProjectService {
+    public projectChangedCallbacks: (() => void)[] = [];
     private project: reactive<ProjectModel> | null = null;
     private stopWatcher: WatchStopHandle | null = null;
     private socketService: ProjectWebSocketService;
@@ -18,8 +19,9 @@ export class ReactiveProjectService {
     // Fetch a project from the server by ID and set it as the current project
     async fetchProject(id: string): Promise<void> {
         try {
-            const response = await axiosInstance.get<ProjectModel>(`/projects/${id}`);
-            this.setProject(response.data);
+            const project = await this.requestProject(id);
+            this.setProject(project);
+            this.lastProjectPushContent = this.computeProjectString(project);
             this.socketService.joinProject(id);
         } catch (error) {
             this.setProject(null);
@@ -30,13 +32,20 @@ export class ReactiveProjectService {
     private async onProjectUpdated(data: any) : Promise<void> {
         if (this.project) {
             try {
-                const response = await axiosInstance.get<ProjectModel>(`/projects/${this.project.id}`);
-                Object.assign(this.project, response.data);
+                const project = await this.requestProject(this.project.id);
+                if(project.lastUpdate.getTime() <= this.project.lastUpdate.getTime()) return;
+                Object.assign(this.project, project);
+                this.lastProjectPushContent = this.computeProjectString(this.project);
                 console.log("Project updated via WebSocket", this.project.postItList);
             } catch (error) {
                 console.error("Failed to fetch project:", error);
             }
         }
+    }
+
+    private async requestProject(id: string): Promise<ProjectModel> {
+        const data : any = (await axiosInstance.get<ProjectModel>(`/projects/${id}`)).data;
+        return {...data, lastUpdate: new Date(data.lastUpdate) };
     }
 
     // Set the current project and start watching it for changes
@@ -48,16 +57,18 @@ export class ReactiveProjectService {
 
         if(!data) {
             this.project = null;
+            this.projectChangedCallbacks?.forEach(cb => cb());
             return;
         }
 
         this.project = reactive(data);
+        this.projectChangedCallbacks?.forEach(cb => cb());
 
         // Watch the project for changes
         this.stopWatcher = watch(
             () => this.project,
             async () => {
-                const projectString = JSON.stringify(this.project);
+                const projectString = this.computeProjectString(this.project);
                 const needSync = this.lastProjectPushContent !== projectString;
                 console.log("Detected local changes, need syncing ?", needSync);
                 if(!needSync) return;
@@ -66,13 +77,6 @@ export class ReactiveProjectService {
             },
             { deep: true }
         );
-    }
-
-    // Update the project's title
-    updateProject(title: string): void {
-        if (this.project) {
-            this.project.title = title;
-        }
     }
 
     // Add a new column to the project
@@ -100,22 +104,9 @@ export class ReactiveProjectService {
     // Add a new PostIt to a specific column
     createPostIt(columnId: number, postIt: PostItModel): void {
         if (this.project) {
-            const column = this.project.postItList.find(col => col.id === columnId);
+            const column : PostItListMode = this.project.postItList.find(col => col.id === columnId);
             if (column) {
                 column.postIts.push(postIt);
-            }
-        }
-    }
-
-    // Update an existing PostIt in a specific column
-    updatePostIt(columnId: number, postItId: number, updatedPostIt: PostItModel): void {
-        if (this.project) {
-            const column = this.project.postItList.find(col => col.id === columnId);
-            if (column) {
-                const postItIndex = column.postIts.findIndex(postIt => postIt.id === postItId);
-                if (postItIndex !== -1) {
-                    column.postIts[postItIndex] = updatedPostIt;
-                }
             }
         }
     }
@@ -137,12 +128,20 @@ export class ReactiveProjectService {
     private async syncProject(): Promise<void> {
         if (this.project) {
             try {
+                this.project.lastUpdate = new Date();
                 await axiosInstance.put(`/projects/${this.project.id}`, this.project);
                 console.log(`Project with ID ${this.project.id} synced successfully`);
             } catch (error) {
                 console.error(`Failed to sync project with ID ${this.project.id}:`, error);
             }
         }
+    }
+
+    private computeProjectString(project: ProjectModel): string {
+        return JSON.stringify(project, (key, value) => {
+            if(key === "lastUpdate") return undefined;
+            return value;
+        });
     }
 
     // Get the reactive project

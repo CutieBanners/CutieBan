@@ -13,7 +13,7 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 <template>
   <div class="card flex justify-center">
     <Drawer v-model:visible="visible" header="CutieBan" id="drawer">
-      <RouterLink to="/"><h3 class="animated-link"><i class="pi pi-home"></i> Home</h3></RouterLink>
+      <RouterLink to="/" @click="visible = false"><h3 class="animated-link"><i class="pi pi-home"></i> Home</h3></RouterLink>
       <h3><i class="pi pi-bookmark-fill"></i> Saved</h3>
       <ul>
         <div v-for="project in projects">
@@ -34,6 +34,9 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 </template>
 
 <style scoped>
+Button{
+  position: absolute;
+}
 ul {
   padding-left: 1rem;
 }

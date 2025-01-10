@@ -19,6 +19,7 @@ export class CRUDService {
         const project = {
             title: title,
             postItList: [],
+            lastUpdate: new Date(),
         } as ProjectModel;
         project.id = await this.dbService.insertOne(project);
         this.updateProject(project.id, project);

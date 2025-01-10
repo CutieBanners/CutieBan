@@ -8,6 +8,7 @@ import {inject, onMounted, ref} from "vue";
 import { PostItModel } from "@/models/PostItModel";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 import anime from "animejs/lib/anime.es"; // Import the PostItModel
+import EditableInput from "@/components/EditableInput.vue"; // Import the PostItModel
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
 const scrollContainer = ref(null); // Reference to the scroll container
@@ -31,7 +32,7 @@ const handleCardClick = (cardId: number, columnId: number) => {
 };
 
 const addPostIt = (columnId: number) => {
-  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It", "", "yellow", null, [], []));
+  projectService.createPostIt(columnId,new PostItModel(Date.now(), "New Post-It", "", "#ffedaf", null, [], []));
 };
 
 const closeModal = () => {
@@ -78,9 +79,10 @@ onMounted(() => {
 <template>
   <div class="">
     <div class="flex justify-content-center">
-      <h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
+      <EditableInput v-model="projectService.currentProject.title" class="chewy-regular xl:text-6xl text-3xl m-0 overflow-hidden"/>
+      <!--<h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
         <Horizontal_rule></Horizontal_rule>
-      </h1>
+      </h1>-->
     </div>
 
     <div class="">

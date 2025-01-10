@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
-import { PostItModel } from "@/models/PostItModel.ts";
+import { defineProps, defineEmits, useTemplateRef, onMounted } from "vue";
+import { PostItModel } from "@/models/PostItModel";
 
 const { model } = defineProps<{
   model: PostItModel
@@ -20,10 +20,17 @@ const handleDrag = (event) => {
     event.target.style.opacity = '1';
   }, 1);
 };
+
+// the first argument must match the ref value in the template
+const postIt = useTemplateRef('post-it')
+
+onMounted(() => {
+  postIt.value.style.backgroundColor = model.color;
+})
 </script>
 
 <template>
-  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick"  @dragstart="handleDrag">
+  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick" @dragstart="handleDrag" ref="post-it">
     <h2 class="overflow-hidden white-space-nowrap text-overflow-ellipsis">{{ model.title }}</h2>
     <div v-html="model.description" class="max-w-10rem overflow-hidden"></div>
   </div>

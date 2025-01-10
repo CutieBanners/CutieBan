@@ -5,9 +5,9 @@ import { ref } from "vue";
 
 export class RecentProjectsService {
     private cookieService: CookieService = new CookieService();
-    private recentProjects = ref<ProjectLinkModel[]>([]);
+    private recentProjects : Ref<ProjectLinkModel[]> = ref<ProjectLinkModel[]>([]);
 
-    getRecentProjects(): ref<ProjectLinkModel[]> {
+    getRecentProjects(): Ref<ProjectLinkModel[]> {
         this.recentProjects.value = this.cookieService.getCookie<ProjectLinkModel[]>("recentProjects");
         if (!this.recentProjects.value) {
             this.recentProjects.value = [];

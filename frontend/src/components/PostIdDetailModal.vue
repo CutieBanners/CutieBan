@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {defineProps, defineEmits, inject, computed} from "vue";
+import {defineProps, defineEmits, inject, computed, useTemplateRef} from "vue";
 import EditableInput from "./EditableInput.vue";
 import Editor from 'primevue/editor';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
 import Popover from 'primevue/popover';
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import {InputText} from "primevue";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
 import anime from 'animejs/lib/anime.es.js';
@@ -15,25 +15,30 @@ import { onMounted } from "vue";
 // Props to accept a PostItModel instance
 const { selectedCard } = defineProps<{ selectedCard: { cardId: number, columnId: number } }>();
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
-const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)!.postIts.find(postIt => postIt.id === selectedCard.cardId)!);
+const postIt = computed(() => projectService.currentProject.postItList.find(column => column.id === selectedCard.columnId)?.postIts.find(postIt => postIt.id === selectedCard.cardId));
+
 const opLabel = ref();
 const opAssignee = ref();
 const newTag = ref('');
 const newAssignee = ref('');
 const animating = ref(false);
 
+const quillEditor = ref(null); // Reference to the Editor component
+
+watch(() => postIt.value, (newValue) => {
+  if (!newValue) closeModal();
+});
+
+watch(() => postIt.value.description, (newValue) => {
+  const editorInstance = quillEditor.value?.quill;
+  if (editorInstance && editorInstance.root.innerHTML !== newValue) {
+    editorInstance.root.innerHTML = newValue; // Update the editor content
+  }
+});
+
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
-
-// Update the PostItModel's title and description
-const updateTitle = (newTitle: string) => {
-  postIt.value.title = newTitle;
-};
-
-const updateDescription = (newDescription: string) => {
-  postIt.value.description = newDescription;
-};
 
 const closeModal = async () => {
   if(animating.value) return;
@@ -48,9 +53,9 @@ const removeCard = () => {
   closeModal();
 }
 
-const addTag = async () => {
+const addTag = () => {
   if (newTag.value.trim()) {
-    await postIt.tags.push(newTag.value.trim());
+    postIt.value.tags.push(newTag.value.trim());
     newTag.value = '';
 
 
@@ -85,9 +90,9 @@ const addTag = async () => {
   }
 };
 
-const addAssignee = async () => {
+const addAssignee = () => {
   if (newAssignee.value.trim()) {
-    await postIt.assignees.push(newAssignee.value.trim());
+    postIt.value.assignees.push(newAssignee.value.trim());
     newAssignee.value = '';
 
     anime({
@@ -129,11 +134,11 @@ const toggleAssignee = (event) => {
 }
 
 const removeTag = (index: number) => {
-  postIt.tags.splice(index, 1);
+  postIt.value.tags.splice(index, 1);
 };
 
 const removeAssignee = (index: number) => {
-  postIt.assignees.splice(index, 1);
+  postIt.value.assignees.splice(index, 1);
 };
 
 const showModalAnimation = () => {
@@ -178,6 +183,8 @@ const hideModalAnimation = () => {
     });
   });
 };
+
+const colors = ["#FFEDAF", "#FFB0B1", "#B0B7FF", "#B0FFC6"]
 
 onMounted(() => {
   showModalAnimation();
@@ -316,6 +323,12 @@ onMounted(() => {
           <div><strong>Due Date:</strong></div>
           <DatePicker v-model="postIt.endDate" />
         </div>
+        <div>
+          <div><strong>Color:</strong></div>
+          <div class="color-container">
+            <div v-for="(color, index) in colors" :key="index" class="color-button" @click="postIt.color = color" :style="{ backgroundColor: color }" :class="{ selected: postIt.color === color }"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Editable Description -->
@@ -323,12 +336,12 @@ onMounted(() => {
       <Editor
           editorStyle="height: 320px"
           v-model="postIt.description"
-          @update:modelValue="updateDescription"
           class="editor_text_sizing"
+          ref="quillEditor"
       />
       <div class="modal-buttons">
         <Button @click="removeCard" label="Remove Card" severity="danger" size="small"></Button>
-        <Button @click="closeModal" label="Save" severity="success" size="small"></Button>
+        <Button @click="closeModal" label="Close" severity="success" size="small"></Button>
       </div>
     </div>
   </div>
@@ -373,5 +386,29 @@ Button{
 
 .p-button-label{
   color: #fff;
+}
+
+.color-container{
+  display: flex;
+  gap: 5px;
+}
+
+.color-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  scale: 1;
+  transition: scale 0.2s ease;
+}
+
+.color-button.selected {
+  border: 2px solid #000;
+}
+
+.color-button:hover {
+  scale: 1.2;
 }
 </style>
