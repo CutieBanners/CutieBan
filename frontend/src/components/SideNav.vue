@@ -12,7 +12,7 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 
 <template>
   <div class="card flex justify-center">
-    <Drawer v-model:visible="visible" header="CutieBan">
+    <Drawer v-model:visible="visible" header="CutieBan" id="drawer">
       <h3 ><RouterLink to="/"><i class="pi pi-home"></i> Home</RouterLink></h3>
       <h3><i class="pi pi-bookmark-fill"></i> Saved</h3>
       <ul>
@@ -46,5 +46,20 @@ li {
 a {
   text-decoration: none;
   color: black;
+}
+
+Button {
+  background-color: #ffedaf;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+Button:enabled:hover {
+  background-color: #d3b344;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+Button:enabled:active {
+  background-color: #d3b344;
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 </style>

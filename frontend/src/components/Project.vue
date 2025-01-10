@@ -124,7 +124,7 @@ onMounted(() => {
 }
 
 .vertical_line {
-  border-right: 2px dashed;
+  border-right: 2px dashed rgba(0, 0, 0, 0.1);
   margin-right: 10px;
   padding-right: 10px;
 }
@@ -137,5 +137,17 @@ onMounted(() => {
   .column-width {
     flex: 0 0 150px;
   }
+}
+
+.p-button {
+  background-color: #fff5c6;
+  border-color: #cdcab8;
+  color: rgba(0,0,0,0.5);
+}
+
+.p-button:not(:disabled):hover{
+  background-color: #ffedaf;
+  border-color: #b8a558;
+  color: rgba(0,0,0,1);
 }
 </style>

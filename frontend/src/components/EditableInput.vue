@@ -67,7 +67,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <div>
+  <div class="root-editable">
     <!-- Display Mode -->
     <div v-if="!isEditing" @click="startEditing" class="editable-text text-overflow-ellipsis">
       {{ editableValue }}
@@ -91,6 +91,11 @@ const handleKeydown = (event: KeyboardEvent) => {
 </template>
 
 <style scoped>
+
+.root-editable{
+  width: 100%;
+}
+
 .editable-text {
   width: 100%;
   font-size: 1.5rem;
@@ -108,4 +113,5 @@ const handleKeydown = (event: KeyboardEvent) => {
   text-align: center;
   border-radius: 5px;
 }
+
 </style>
