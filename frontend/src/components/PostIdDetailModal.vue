@@ -399,10 +399,16 @@ Button{
   border-radius: 4px;
   margin-right: 5px;
   cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  scale: 1;
+  transition: scale 0.2s ease;
 }
 
 .color-button.selected {
   border: 2px solid #000;
+}
+
+.color-button:hover {
+  scale: 1.2;
 }
 </style>
