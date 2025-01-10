@@ -2,7 +2,6 @@
 import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
-import Horizontal_rule from "@/components/HorizontalRule.vue";
 import {Button} from "primevue";
 import {inject, onMounted, ref} from "vue";
 import { PostItModel } from "@/models/PostItModel";
@@ -79,10 +78,7 @@ onMounted(() => {
 <template>
   <div class="">
     <div class="flex justify-content-center">
-      <EditableInput v-model="projectService.currentProject.title" class="chewy-regular xl:text-6xl text-3xl m-0 overflow-hidden"/>
-      <!--<h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
-        <Horizontal_rule></Horizontal_rule>
-      </h1>-->
+      <EditableInput v-model="projectService.currentProject.title" :isTitle="true" class="chewy-regular xl:max-w-30rem md:max-w-10rem"/>
     </div>
 
     <div class="">

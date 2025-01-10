@@ -6,6 +6,7 @@ import anime from "animejs/lib/anime.es.js";
 // Props
 const props = defineProps<{
   modelValue: string; // The bound value for the editable text
+  isTitle?: boolean;
 }>();
 
 // Events
@@ -70,19 +71,38 @@ const handleKeydown = (event: KeyboardEvent) => {
   <div class="root-editable">
     <!-- Display Mode -->
     <div v-if="!isEditing" @click="startEditing" class="editable-text text-overflow-ellipsis">
-      {{ editableValue }}
+      <div v-if="!isTitle" class="text-2xl">
+        {{ editableValue }}
+      </div>
+      <div v-else>
+        <h1 class="chewy-regular xl:text-5xl text-3xl m-0 editable-text text-overflow-ellipsis underline">
+          {{ editableValue }}
+        </h1>
+      </div>
     </div>
 
     <!-- Edit Mode -->
     <FloatLabel v-else class="ml-2 text-overflow-clip">
       <InputText
+          v-if="isTitle"
           id="in_label"
           autocomplete="off"
           ref="inputRef"
           v-model="editableValue"
           @blur="finishEditing"
           @keydown="handleKeydown"
-          class="editable-input"
+          class="editable-input text-3xl"
+          :autofocus="isEditing"
+      />
+      <InputText
+          v-else
+          id="in_label"
+          autocomplete="off"
+          ref="inputRef"
+          v-model="editableValue"
+          @blur="finishEditing"
+          @keydown="handleKeydown"
+          class="editable-input text-2xl"
           :autofocus="isEditing"
       />
     </FloatLabel>
@@ -92,13 +112,8 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 <style scoped>
 
-.root-editable{
-  width: 100%;
-}
-
 .editable-text {
   width: 100%;
-  font-size: 1.5rem;
   text-align: center;
   cursor: pointer;
   white-space: nowrap;
@@ -109,7 +124,6 @@ const handleKeydown = (event: KeyboardEvent) => {
 .editable-input {
   width: 100%;
   padding: 5px;
-  font-size: 1.5rem;
   text-align: center;
   border-radius: 5px;
 }
