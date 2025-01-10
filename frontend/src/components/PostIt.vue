@@ -21,16 +21,10 @@ const handleDrag = (event) => {
   }, 1);
 };
 
-// the first argument must match the ref value in the template
-const postIt = useTemplateRef('post-it')
-
-onMounted(() => {
-  postIt.value.style.backgroundColor = model.color;
-})
 </script>
 
 <template>
-  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick" @dragstart="handleDrag" ref="post-it">
+  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick" @dragstart="handleDrag" :style="{ backgroundColor: model.color }">
     <h2 class="overflow-hidden white-space-nowrap text-overflow-ellipsis">{{ model.title }}</h2>
     <div v-html="model.description" class="max-w-10rem overflow-hidden"></div>
   </div>
