@@ -221,7 +221,7 @@ onMounted( () => {
         <i class="pi pi-times cursor-pointer" @click="closeModal" @touchend="closeModal"></i>
       </div>
 
-      <div class="flex gap-3 w-full">
+      <div class="flex gap-3 w-full" id="modal-bar">
         <div>
           <div>
             <strong>Assignees:</strong>
@@ -378,6 +378,17 @@ onMounted( () => {
   align-items: center;
 }
 
+.p-button-sm{
+  margin-right: 5px;
+}
+
+.grid {
+  flex-wrap: nowrap;
+}
+
+#modal-bar{
+  flex-wrap: wrap;
+}
 
 .modal-buttons {
   display: flex;
