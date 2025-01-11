@@ -13,13 +13,14 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
 <template>
   <div class="card flex justify-center">
     <Drawer v-model:visible="visible" header="CutieBan" id="drawer">
-      <RouterLink to="/" @click="visible = false"><h3 class="animated-link"><i class="pi pi-home"></i> Home</h3></RouterLink>
+      <RouterLink to="/" @click="visible = false" @touchend="visible = false"<h3 class="animated-link"><i class="pi pi-home"></i> Home</h3></RouterLink>
       <h3><i class="pi pi-bookmark-fill"></i> Saved</h3>
       <ul>
         <div v-for="project in projects">
           <RouterLink
               :to="{ name: 'project', params: { id: project.id } }"
               @click="visible = false"
+              @touchend="visible = false"
           >
             <li class="animated-link w-auto">
               <i class="pi pi-angle-right animated-icon"></i>
@@ -29,7 +30,7 @@ const projects : ProjectLinkModel[] = recentProjects.getRecentProjects();
         </div>
       </ul>
     </Drawer>
-    <Button icon="pi pi-bars" @click="visible = true" severity="secondary"/>
+    <Button icon="pi pi-bars" @click="visible = true" @touchend ="visible = true" severity="secondary"/>
   </div>
 </template>
 

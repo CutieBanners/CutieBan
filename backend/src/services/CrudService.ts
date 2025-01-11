@@ -1,6 +1,4 @@
 import { DatabaseService } from './DatabaseService';
-import { PostItListModel} from '../models/PostItListModel';
-import { PostItModel} from '../models/PostItModel';
 import { ProjectModel} from '../models/ProjectModel';
 
 /**
@@ -51,8 +49,11 @@ export class CRUDService {
     async updateProject(projectId: string, project: ProjectModel ): Promise<number> {
         const existingProject = await this.dbService.findOne<ProjectModel>(projectId);
         if (!existingProject) return NaN;
-
-        Object.assign(existingProject, project);
+        
+        project.postItList = this.reorderByIndex(project.postItList);
+        project.postItList.forEach((postItList) => {
+            postItList.postIts = this.reorderByIndex(postItList.postIts);
+        });
 
         return await this.dbService.updateOne(projectId, project);
     }
@@ -78,5 +79,17 @@ export class CRUDService {
      */
     private sortByOrder<T extends { order: number }>(list: T[]): T[] {
         return list.sort((a, b) => a.order - b.order);
+    }
+
+    /**
+     * Reorders any list properly depending on the index of the item in the list.
+     * @param list - The postItList to update.
+     * @returns properly ordered list
+     */
+    private reorderByIndex<T extends {order: number}>(list: T[]): T[] {
+        return list.map((item, index) => {
+            item.order = index;
+            return item;
+        });
     }
 }
