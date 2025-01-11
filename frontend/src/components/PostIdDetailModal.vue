@@ -53,20 +53,26 @@ const removeCard = () => {
   closeModal();
 }
 
+const tagAnimation = (duration = 300, stagger = 50) => {
+  anime({
+    targets: '.tag',
+    translateX: [-50, 0],
+    opacity: [0, 1],
+    easing: "easeOutExpo",
+    duration: duration,
+    delay: anime.stagger(stagger, { start: 0 }),
+  });
+}
+
 const addTag = () => {
   if (newTag.value.trim()) {
     postIt.value.tags.push(newTag.value.trim());
     newTag.value = '';
 
+    setTimeout(() => {
+      tagAnimation();
+    }, 0);
 
-    anime({
-      targets: '#tag',
-      translateX: [-50, 0],
-      opacity: [0, 1],
-      easing: "easeOutExpo",
-      duration: 40,
-      delay: anime.stagger(100, { start: 0 }),
-    });
   }
   else {
     document.getElementById("input-tag").style.borderColor = "red";
@@ -90,19 +96,25 @@ const addTag = () => {
   }
 };
 
+const assigneeAnimation = (duration = 300, stagger = 50) => {
+  anime({
+    targets: '.assignees',
+    translateX: [-50, 0],
+    opacity: [0, 1],
+    easing: "easeOutExpo",
+    duration: duration,
+    delay: anime.stagger(stagger, { start: 0 }),
+  });
+}
+
 const addAssignee = () => {
   if (newAssignee.value.trim()) {
     postIt.value.assignees.push(newAssignee.value.trim());
     newAssignee.value = '';
 
-    anime({
-      targets: '#assignees',
-      translateX: [-50, 0],
-      opacity: [0, 1],
-      easing: "easeOutExpo",
-      duration: 40,
-      delay: anime.stagger(100, { start: 0 }),
-    });
+    setTimeout(() => {
+      assigneeAnimation();
+    }, 0);
   }
   else {
     document.getElementById("input-assignee").style.borderColor = "red";
@@ -186,8 +198,10 @@ const hideModalAnimation = () => {
 
 const colors = ["#FFEDAF", "#FFB0B1", "#B0B7FF", "#B0FFC6"]
 
-onMounted(() => {
+onMounted( () => {
   showModalAnimation();
+  assigneeAnimation(600, 150);
+  tagAnimation(600, 150);
 });
 
 </script>
@@ -223,10 +237,9 @@ onMounted(() => {
                   severity="contrast"
                   variant="outlined"
                   size="small"
-                  class="text-sm max-w-5rem overflow-x-auto"
+                  class="text-sm max-w-5rem overflow-x-auto assignees"
                   @click="removeAssignee(index)"
                   @touchend="removeAssignee(index)"
-                  id="assignees"
               >
                 {{assignee}}
               </Button>
@@ -282,10 +295,9 @@ onMounted(() => {
                   severity="contrast"
                   variant="outlined"
                   size="small"
-                  class="text-sm max-w-5rem overflow-x-auto"
+                  class="text-sm max-w-5rem overflow-x-auto tag"
                   @click="removeTag(index)"
                   @touchend="removeTag(index)"
-                  id="tag"
               >
                 {{ tag }}
               </Button>
