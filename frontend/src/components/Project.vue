@@ -58,13 +58,15 @@ const startAnimation = () => {
 
   for (let i = 0; i < postIts.length; i++) {
     postIts[i].classList.add("animated");
-    postIts[i].style.transform = "translateY(50vh)";
+    postIts[i].style.transform = "translateY(30vh)";
   }
+
 
   anime({
     targets: postIts,
     translateY: 0,
-    delay: function(el, i) { return i * 100; },
+    duration: 700,
+    delay: anime.stagger(70, { start: 0 }),
     easing: 'easeInOutSine'
   });
 }
