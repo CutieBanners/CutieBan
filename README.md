@@ -11,11 +11,62 @@ This is a [Vite](https://vitejs.dev/) project.
 * node v21+ [official doc](https://nodejs.org/en/download)
 * git version 2.39 [official doc](https://git-scm.com/)
 * git-lfs/3.5 + [official doc](https://git-lfs.github.com/)
-* Astah UML 8+ [official doc](https://astah.net/products/astah-uml/)
-* Jira [official doc](https://www.atlassian.com/software/jira)
+* MongoDB 8+ [official doc](https://www.mongodb.com/try/download/community)
 
 ### Class syntax
 The classes are written in order to follow the [Google TypeScript style guidelines](https://google.github.io/styleguide/tsguide.html#classes)
+
+### Getting Started
+To try the app, you can use the [public instance deployed here](https://kanban.eliott.pro/).
+
+#### Setting Up Environment Variables
+
+1. **Ensure you have the latest MongoDB setup**. You can download and install it from the [official MongoDB website](https://www.mongodb.com/try/download/community).
+
+2. **Create a `.env` file** in the root directory of both the `frontend` and `backend` folders by copying the provided `.env.template` file:
+    ```sh
+    cp frontend/.env.template frontend/.env
+    cp backend/.env.template backend/.env
+    ```
+
+3. **Configure the environment variables** in the `.env` files as needed. For example, in the `backend/.env` file, you might set the database URL, name, and collection:
+    ```dotenv
+    DB_URL="mongodb://localhost:27017"
+    DB_NAME="CuteBanners"
+    DB_COLLECTION="projects"
+    ```
+
+   And in the `frontend/.env` file, you might set the server API and WebSocket URLs:
+    ```dotenv
+    VITE_SERVER_API_URL=http://localhost:3000
+    VITE_SERVER_WS_URL=ws://localhost:3000
+    ```
+   
+#### Running the Application Locally
+##### Frontend
+1. **Install dependencies**:
+    ```sh
+    cd frontend
+    npm install
+    ```
+
+2. **Start the development server**:
+    ```sh
+    npm run dev
+    ```
+
+##### Backend
+
+1. **Install dependencies**:
+    ```sh
+    cd backend
+    npm install
+    ```
+
+2. **Start the development server**:
+    ```sh
+    npm run dev
+    ```
 
 ### Workflow
 * [Gitflow](https://www.atlassian.com/fr/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=Gitflow%20est%20l'un%20des,les%20hotfix%20vers%20la%20production.)
