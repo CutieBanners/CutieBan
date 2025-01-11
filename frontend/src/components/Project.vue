@@ -2,11 +2,11 @@
 import CardList from "./PostItList.vue";
 import Draggable from "vuedraggable";
 import Modal from "./PostIdDetailModal.vue";
-import Horizontal_rule from "@/components/HorizontalRule.vue";
 import {Button} from "primevue";
-import {inject, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import { PostItModel } from "@/models/PostItModel";
 import {ReactiveProjectService} from "@/services/ReactiveProjectService";
+import anime from "animejs/lib/anime.es"; // Import the PostItModel
 import EditableInput from "@/components/EditableInput.vue"; // Import the PostItModel
 
 const projectService: ReactiveProjectService = inject('reactiveProjectService')!;
@@ -52,15 +52,33 @@ const dragOptions = ref({
 
 const drag = ref(false);
 
+const startAnimation = () => {
+
+  let postIts = document.querySelectorAll(".vertical_line:not(.animated)");
+
+  for (let i = 0; i < postIts.length; i++) {
+    postIts[i].classList.add("animated");
+    postIts[i].style.transform = "translateY(50vh)";
+  }
+
+  anime({
+    targets: postIts,
+    translateY: 0,
+    delay: function(el, i) { return i * 100; },
+    easing: 'easeInOutSine'
+  });
+}
+
+onMounted(() => {
+  startAnimation();
+});
+
 </script>
 
 <template>
   <div class="">
     <div class="flex justify-content-center">
-      <EditableInput v-model="projectService.currentProject.title" class="chewy-regular xl:text-6xl text-3xl m-0 overflow-hidden"/>
-      <!--<h1 class="chewy-regular xl:text-6xl text-3xl m-0">{{ projectService.currentProject.title }}
-        <Horizontal_rule></Horizontal_rule>
-      </h1>-->
+      <EditableInput v-model="projectService.currentProject.title" :isTitle="true" class="chewy-regular xl:max-w-30rem md:max-w-10rem"/>
     </div>
 
     <div class="">

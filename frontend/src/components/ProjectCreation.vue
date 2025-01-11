@@ -111,105 +111,105 @@ onMounted(() => {
 </template>
 
 <style scoped>
-  .big_title {
-    padding: 20px;
-    font-size: 4rem;
-    height: 10rem !important;
-  }
+.big_title {
+  padding: 20px;
+  font-size: 4rem;
+  height: 10rem !important;
+}
 
-  .container {
-    justify-items: center;
-  }
+.container {
+  justify-items: center;
+}
 
-  form{
-    display: flex;
-    justify-content: center;
-  }
+form{
+  display: flex;
+  justify-content: center;
+}
+
+.p-inputtext {
+  font-size: 2rem;
+  max-width: 50%;
+}
+
+button {
+  font-size: 2rem;
+}
+
+
+@media only screen and (max-width: 600px) {
 
   .p-inputtext {
-    font-size: 2rem;
-    max-width: 50%;
+    font-size: 7vw;
   }
 
   button {
+    font-size: 7vw;
+  }
+}
+.animated-gradient-button {
+  position: relative;
+  display: inline-block;
+  padding: 9px 25px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 0.2rem;
+  background: linear-gradient(90deg, #5763ff, #5496ff, #5763ff, #5496ff);
+  background-size: 300% 100%;
+  animation: gradient-loop 4s linear infinite;
+  animation-direction: normal;
+  animation-fill-mode: backwards;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Hover effect for shadow */
+.animated-gradient-button:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Gradient Animation */
+@keyframes gradient-loop {
+  0% {
+    background-position: 100% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Shake animation */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+}
+
+@media only screen and (max-width: 600px) {
+  .big_title {
     font-size: 2rem;
   }
-
-
-  @media only screen and (max-width: 600px) {
-
-    .p-inputtext {
-      font-size: 7vw;
-    }
-
-    button {
-      font-size: 7vw;
-    }
-  }
-  .animated-gradient-button {
-    position: relative;
-    display: inline-block;
-    padding: 9px 25px;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 0.2rem;
-    background: linear-gradient(90deg, #5763ff, #5496ff, #5763ff, #5496ff);
-    background-size: 300% 100%;
-    animation: gradient-loop 4s linear infinite;
-    animation-direction: normal;
-    animation-fill-mode: backwards;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s ease;
-  }
-
-  /* Hover effect for shadow */
-  .animated-gradient-button:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
-  }
-
-  /* Gradient Animation */
-  @keyframes gradient-loop {
-    0% {
-      background-position: 100% 0%;
-    }
-    100% {
-      background-position: 0% 100%;
-    }
-  }
-
-
-  .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-
-  /* Shake animation */
-  @keyframes shake {
-    0%, 100% {
-      transform: translateX(0);
-    }
-    25% {
-      transform: translateX(-5px);
-    }
-    50% {
-      transform: translateX(5px);
-    }
-    75% {
-      transform: translateX(-5px);
-    }
-  }
-
-  .shake {
-    animation: shake 0.5s ease;
-  }
-
-  @media only screen and (max-width: 600px) {
-    .big_title {
-      font-size: 2rem;
-    }
-  }
+}
 
 </style>
