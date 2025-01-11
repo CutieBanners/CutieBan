@@ -1,0 +1,40 @@
+/* Source : https://codepen.io/jweden/pen/kGBBpM */
+
+.post-it {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    position:relative;
+    background: #ffedaf;
+    overflow:hidden;
+    border-radius:0 0 0 30px/45px;
+    z-index: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.post-it:before {
+    content:"";
+    display:block;
+    position:absolute;
+    width:20px;
+    height:25px;
+    background-color: inherit; /* Inherit parent's color */
+    filter: saturate(2.5) brightness(0.92);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    left:0;
+    bottom:0;
+    z-index:2;
+    transform:skewX(25deg);
+}
+
+.post-it h2, .post-it p {
+    margin: 0;
+    padding: 0;
+}
+
+input.p-inputtext:enabled:focus {
+    border: 1px solid #ffbf00;
+}
+
+#drawer{
+    background-color: #fff9de;
+}
