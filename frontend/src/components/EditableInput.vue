@@ -69,7 +69,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 <template>
   <div class="root-editable">
     <!-- Display Mode -->
-    <div v-if="!isEditing" @click="startEditing" class="editable-text text-overflow-ellipsis">
+    <div v-if="!isEditing" @click="startEditing" @touchend="startEditing" class="editable-text text-overflow-ellipsis">
       {{ editableValue }}
     </div>
 

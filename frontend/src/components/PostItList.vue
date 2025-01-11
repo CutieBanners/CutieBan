@@ -41,7 +41,7 @@ const drag = ref(false);
       <!-- Editable title -->
       <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" class="max-w-10rem overflow-hidden"/>
       <!-- Button to remove the column -->
-      <i class="pi pi-trash remove-button" @click="$emit('removeColumn', id)"></i>
+      <i class="pi pi-trash remove-button" @click="$emit('removeColumn', id)" @touchend="$emit('removeColumn', id)"></i>
     </div>
 
     <!-- Draggable post-it container -->
@@ -52,7 +52,7 @@ const drag = ref(false);
           <PostIt :model="element" @cardClick="(cardId) => $emit('cardClick', cardId, id)" class="post-it-hover"/>
         </template>
         <template #footer>
-          <div class="post-it h-3rem opacity-50 text-center post-it-hover" @click="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
+          <div class="post-it h-3rem opacity-50 text-center post-it-hover" @click="$emit('addPostIt', id, model.postIts.length + 1)" @touchend="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
         </template>
       </draggable>
     </transition-group>

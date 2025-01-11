@@ -79,7 +79,7 @@ const drag = ref(false);
             <CardList :id="element.id" @removeColumn="removeColumn" @cardClick="handleCardClick" @addPostIt="addPostIt" class="h-full column-width vertical_line"/>
           </template>
           <template #footer>
-            <Button @click="addColumn" class="h-fit p-2 column-width border-2">Add Column</Button>
+            <Button @click="addColumn" @touchend="addColumn" class="h-fit p-2 column-width border-2">Add Column</Button>
           </template>
         </draggable>
       </transition-group>

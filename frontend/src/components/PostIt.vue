@@ -32,7 +32,7 @@ const textColor = computed(() => {
 </script>
 
 <template>
-  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick" @dragstart="handleDrag" :style="{ backgroundColor: model.color}">
+  <div class="post-it max-h-10rem max overflow-y-hidden column-width" @click="handleClick" @touchend="handleClick" @dragstart="handleDrag" :style="{ backgroundColor: model.color}">
     <h2 class="overflow-hidden white-space-nowrap text-overflow-ellipsis" :style="{ color: textColor }">{{model.title}}</h2>
     <div v-html="model.description" class="max-w-10rem overflow-hidden"></div>
   </div>
