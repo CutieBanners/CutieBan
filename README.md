@@ -11,6 +11,7 @@ This is a [Vite](https://vitejs.dev/) project.
 * node v21+ [official doc](https://nodejs.org/en/download)
 * git version 2.39 [official doc](https://git-scm.com/)
 * git-lfs/3.5 + [official doc](https://git-lfs.github.com/)
+* MongoDB 8+ [official doc](https://www.mongodb.com/try/download/community)
 
 ### Class syntax
 The classes are written in order to follow the [Google TypeScript style guidelines](https://google.github.io/styleguide/tsguide.html#classes)
