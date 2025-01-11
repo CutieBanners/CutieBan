@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import {Button, InputText} from 'primevue';
-import {onMounted, ref} from "vue";
+import {onMounted, inject, ref} from "vue";
+import {ProjectsService} from "@/services/ProjectsService";
+import {ProjectModel} from "@/models/ProjectModel";
+import { useRouter } from "vue-router";
 import anime from "animejs/lib/anime.es.js";
 
 const formData = ref({ name: '' });
 const showError = ref(false);
 const isShaking = ref(false);
 const hover = ref(false);
+const router = useRouter();
 
-const handleSubmit = () => {
+const projectsService: ProjectsService = inject('projectsService')!;
+
+const handleSubmit = async () => {
   if (!formData.value.name) {
     showError.value = true;
     isShaking.value = true;
@@ -17,6 +23,12 @@ const handleSubmit = () => {
     }, 500);
   } else {
     showError.value = false;
+    try {
+      const project : ProjectModel = await projectsService.createProject(formData.value.name);
+      await router.push({name: "project", params: {id: project.id}});
+    } catch (error) {
+      console.error("Failed to create project:", error);
+    }
   }
 };
 

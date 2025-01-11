@@ -32,32 +32,16 @@ const dragOptions = ref({
 });
 
 const drag = ref(false);
-
-onMounted(() => {
-  // Set the initial state
-  document.querySelectorAll('.post-it').forEach((el) => {
-    el.style.transform = 'translateX(-300px)';
-  });
-
-  // Animate to the final position
-  anime({
-    targets: '.post-it',
-    translateX: 0, // Move to the final position
-    delay: anime.stagger(30), // Increase delay by 100ms for each element
-    duration: 400, // Duration of the animation
-    easing: 'easeOutQuad' // Smooth easing
-  });
-});
 </script>
 
 <template>
   <div class="">
-    <div class="flex align-items-center justify-content-between cursor-pointer h-3rem">
-      <i class="pi pi-arrows-h drag-handle"></i>
+    <div class="flex align-items-center justify-content-between cursor-pointer h-3rem drag-handle">
+      <i class="pi pi-arrows-h"></i>
       <!-- Editable title -->
       <EditableInput v-model="model.title" @finishEditing="handleTitleEditFinished" class="max-w-10rem overflow-hidden"/>
       <!-- Button to remove the column -->
-      <i class="pi pi-trash remove-button" @click="$emit('removeColumn', id)"></i>
+      <i class="pi pi-trash remove-button" @click="$emit('removeColumn', id)" @touchend="$emit('removeColumn', id)"></i>
     </div>
 
     <!-- Draggable post-it container -->
@@ -68,7 +52,7 @@ onMounted(() => {
           <PostIt :model="element" @cardClick="(cardId) => $emit('cardClick', cardId, id)" class="post-it-hover"/>
         </template>
         <template #footer>
-          <div class="post-it h-3rem opacity-50 text-center post-it-hover" @click="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
+          <div class="post-it h-3rem opacity-50 text-center post-it-hover" @click="$emit('addPostIt', id, model.postIts.length + 1)" @touchend="$emit('addPostIt', id, model.postIts.length + 1)">+</div>
         </template>
       </draggable>
     </transition-group>
